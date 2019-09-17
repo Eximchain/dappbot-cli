@@ -1,0 +1,60 @@
+{
+	"name": "dappbot-cli",
+	"version": "0.0.0",
+	"license": "MIT",
+	"bin": "build/cli.js",
+	"engines": {
+		"node": ">=8"
+	},
+	"scripts": {
+		"test": "xo && ava",
+		"build": "tsc"
+	},
+	"files": [
+		"cli.js",
+		"ui.js"
+	],
+	"dependencies": {
+		"@eximchain/dappbot-api-client": "^1.1.0",
+		"@eximchain/dappbot-types": "^1.2.5",
+		"@types/ink-spinner": "^2.0.1",
+		"@types/node": "^12.7.5",
+		"@types/yargs": "^13.0.2",
+		"ink": "^2.3.0",
+		"ink-link": "^1.0.0",
+		"ink-select": "^1.2.0",
+		"ink-spinner": "^3.0.1",
+		"ink-text-input": "^3.2.1",
+		"node-fetch": "^2.6.0",
+		"password-validator": "^5.0.2",
+		"react": "^16.9.0",
+		"react-request-hook": "^2.1.1",
+		"request": "^2.88.0",
+		"yargs": "^14.0.0"
+	},
+	"devDependencies": {
+		"@babel/preset-react": "^7.0.0",
+		"@babel/register": "^7.6.0",
+		"ava": "^2.3.0",
+		"chalk": "^2.4.2",
+		"eslint-config-xo-react": "^0.20.0",
+		"eslint-plugin-react": "^7.14.3",
+		"eslint-plugin-react-hooks": "^2.0.1",
+		"ink-testing-library": "^1.0.2",
+		"typescript": "^3.6.3",
+		"xo": "^0.24.0"
+	},
+	"ava": {
+		"require": [
+			"@babel/register"
+		]
+	},
+	"babel": {
+		"presets": [
+			"@babel/preset-react"
+		]
+	},
+	"xo": {
+		"extends": "xo-react"
+	}
+}
