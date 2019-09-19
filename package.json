@@ -1,19 +1,17 @@
 {
-	"name": "dappbot-cli",
-	"version": "0.0.0",
+	"name": "@eximchain/dappbot-cli",
+	"version": "0.0.1",
 	"license": "MIT",
+	"main": "build/cli.js",
 	"bin": "build/cli.js",
 	"engines": {
 		"node": ">=8"
 	},
 	"scripts": {
 		"test": "xo && ava",
-		"build": "tsc"
+		"build": "tsc",
+		"start": "node build/cli.js"
 	},
-	"files": [
-		"cli.js",
-		"ui.js"
-	],
 	"dependencies": {
 		"@eximchain/dappbot-api-client": "^1.1.0",
 		"@eximchain/dappbot-types": "^1.2.5",
