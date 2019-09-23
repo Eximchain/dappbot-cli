@@ -21,8 +21,8 @@ export function builder(yargs: Argv) {
 
 export function handler(args: ArgShape<DappNameArg>) {
   render(
-    <App args={args} renderFunc={({ API, opts }) => {
-      const DappName = opts.DappName;
+    <App args={args} renderFunc={({ API }) => {
+      const DappName = args.DappName;
       return (
         <PrettyRequest req={() => API.public.viewDapp.call(DappName)} />
       )

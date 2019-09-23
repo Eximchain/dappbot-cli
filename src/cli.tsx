@@ -1,18 +1,22 @@
 #!/usr/bin/env node
 import yargs, { Arguments } from 'yargs';
+import { MethodAbi } from 'ethereum-types';
 import User from '@eximchain/dappbot-types/spec/user';
 import fs from 'fs';
 import path from 'path';
-import { loadAuthDataMiddleware } from './services/util';
+import { loadFileMiddleware, checkDefaultAuthMiddleware } from './services/util';
 
 const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
+export const DEFAULT_DATA_PATH = './dappbotAuthData.json';
 export interface DappNameArg {
   DappName: string
 }
 export interface UniversalArgs {
+	authPath?: string
 	authFile?: string
-	authData?: User.AuthData
+	AbiPath?: string
+	AbiFile?: string
 }
 
 export interface AdditionalArgs {
@@ -23,13 +27,14 @@ export type ArgShape<Additional = AdditionalArgs> = Arguments<UniversalArgs & Ad
 
 yargs
 	.options({
-		authFile : {
+		authPath : {
 			alias: 'a',
-			type: 'string',
+			normalize: true,
 			description: 'The path to a file with saved DappBot auth data.'
 		}
 	})
-	.middleware(loadAuthDataMiddleware)
+	.middleware(checkDefaultAuthMiddleware)
+	.middleware(loadFileMiddleware)
 	.commandDir('rootCmds')
 	.usage('Usage: dappbot <command> [args]')
 	.demandCommand(2)

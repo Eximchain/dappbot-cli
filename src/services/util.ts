@@ -24,11 +24,15 @@ export function commandFromSampleArgs(command:string, sampleArg:any) {
   return `${command} ${args.map(delimiter).join(' ')}`
 }
 
-
 type DescriptionMap<Shape> = Partial<Record<keyof Shape, string>>;
 
 /**
  * Given a yargs instance, a sample argument shape, and a map of
+ * descriptions, call the `yargs.positional()` function with the
+ * appropriate args to instrument the command with help text for
+ * all arguments.  **Note**: This does not supported nested
+ * arguments; if a key's value type is not `string`, `number`, 
+ * or `boolean`, it is ignored.
  * @param yargs 
  * @param argShape 
  * @param descriptions 
@@ -52,18 +56,35 @@ export function describePositionalArgs<Shape extends object>(yargs:Argv, argShap
 }
 
 /**
- * Listens for the --authFile argument, and if present, attempts to
- * load that file as a JSON
+ * Listen for any options whose name ends in "Path", and if found,
+ * read the file's contents as a string and add it as an argument
+ * whose name ends in "File".  For instance, "authPath" will yield
+ * an "authFile" string, which can be JSON.parse()d to get the
+ * actual authData.
  * @param args 
  */
-export function loadAuthDataMiddleware(args:ArgShape): ArgShape {
-  if (args.authFile) {
-    const authPath = path.resolve(process.cwd(), args.authFile);
-    if (!fs.existsSync(authPath)) throw new Error('The specified auth file path does not have a file!');
-    args.authData = JSON.parse(fs.readFileSync(authPath).toString());
-    if (!User.isAuthData(args.authData)) throw new Error("We found your file, but it doesn't contain valid auth data!");
+export function loadFileMiddleware(args:ArgShape): ArgShape {
+  const pathKeys = Object.keys(args).filter(key => key.indexOf('Path') > -1);
+  pathKeys.forEach(pathKey => {
+    const fullPath = path.resolve(process.cwd(), args[pathKey]);
+    if (!fs.existsSync(fullPath)) throw new Error(`The specified path (${pathKey}, ${args[pathKey]}) does not have a file!`);
+    const fileKey = `${pathKey.slice(0, pathKey.indexOf('Path'))}File`;
+    args[fileKey] = fs.readFileSync(fullPath).toString();
+  })
+  return args;
+}
+
+/**
+ * 
+ * @param args 
+ */
+export function checkDefaultAuthMiddleware(args:ArgShape): ArgShape {
+  if (!args.authPath) {
+    const defaultPath = path.resolve(process.cwd(), './dappbotAuthData.json');
+    if (fs.existsSync(defaultPath)) {
+      args.authPath = defaultPath;
+    }
   }
-  console.log('args at end of middleware: ',args);
   return args;
 }
 
@@ -72,8 +93,9 @@ export function loadAuthDataMiddleware(args:ArgShape): ArgShape {
  * @param args 
  */
 export function requireAuthData(args:ArgShape): ArgShape {
-  if (!args.authData || !User.isAuthData(args.authData)) {
-    throw new Error("You're calling a private API method; please supply a path to your authData file with the --authFile option.");
+  if (!args.authFile || !User.isAuthData(JSON.parse(args.authFile))) {
+    console.log("You're calling a private API method; please supply a path to your authData file with the --authPath option.");
+    process.exit(1);
   }
   return args;
 }

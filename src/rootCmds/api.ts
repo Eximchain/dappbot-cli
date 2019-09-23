@@ -9,7 +9,6 @@ export const desc = 'Directly access all of DappBot API methods, organized by th
 export function builder(yargs:Argv) {
   return yargs
     .commandDir('authCmds')
-    .commandDir('paymentCmds')
     .commandDir('privateCmds')
     .commandDir('publicCmds')
 }

@@ -16,6 +16,7 @@
 		"@eximchain/dappbot-api-client": "^1.1.0",
 		"@eximchain/dappbot-types": "^1.2.5",
 		"@types/ink-spinner": "^2.0.1",
+		"@types/lodash.omit": "^4.5.6",
 		"@types/node": "^12.7.5",
 		"@types/yargs": "^13.0.2",
 		"ink": "^2.3.0",
@@ -23,6 +24,7 @@
 		"ink-select": "^1.2.0",
 		"ink-spinner": "^3.0.1",
 		"ink-text-input": "^3.2.1",
+		"lodash.omit": "^4.5.0",
 		"node-fetch": "^2.6.0",
 		"password-validator": "^5.0.2",
 		"react": "^16.9.0",
@@ -39,6 +41,7 @@
 		"eslint-plugin-react": "^7.14.3",
 		"eslint-plugin-react-hooks": "^2.0.1",
 		"ink-testing-library": "^1.0.2",
+		"ts-xor": "^1.0.8",
 		"typescript": "^3.6.3",
 		"xo": "^0.24.0"
 	},

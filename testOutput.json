@@ -1,0 +1,160 @@
+args at end of middleware:  { _: [ 'api', 'auth/login' ],
+  '$0': 'build/cli.js',
+  username: 'j.osullivan42+typetest@gmail.com',
+  password: 'Soup3rS3cret!' }
+
+⠋About to make the request...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠋Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠙Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠹Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠸Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠼Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠴Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠦Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠧Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠇Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠏Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠋Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠙Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠹Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠸Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠼Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠴Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠦Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠧Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠇Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠏Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠋Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠙Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠹Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠸Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠼Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠴Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠦Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠧Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠇Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠏Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[G
+⠋Your request is in the air...
+
+[2K[1A[2K[1A[2K[1A[2K[GResult:
+
+
+
+
+{
+  "data": {
+    "Authorization": "eyJraWQiOiJKWE5rVDZoYVI1emlZWTMyR0M0ZVNMZWROSzViYzNKS1ZldG9cL3NyZjliMD0iLCJhbG
+ciOiJSUzI1NiJ9.eyJjdXN0b206c3RhbmRhcmRfbGltaXQiOiIyIiwic3ViIjoiNGQyYmY1MGEtOGQ2Ny00YmY2LTg1YTItZjBhM
+Dk2YzI3ZjRhIiwiY3VzdG9tOmVudGVycHJpc2VfbGltaXQiOiIwIiwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc
+3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfYXhjWHQzQmRxIiwiY3VzdG9tOnByb2Zlc3Npb25hbF9saW1pdCI6IjAiLCJjb
+2duaXRvOnVzZXJuYW1lIjoiNGQyYmY1MGEtOGQ2Ny00YmY2LTg1YTItZjBhMDk2YzI3ZjRhIiwiYXVkIjoiNWlwOGU5NXJ1MGlxc
+2s1Mm0ybXVzZXAxcXMiLCJjdXN0b206cGF5bWVudF9zdGF0dXMiOiJBQ1RJVkUiLCJldmVudF9pZCI6IjdhY2VhZTgwLWI0NTYtN
+GM1Yy05NmU4LTkwNjRkNzNlYjYyMCIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNTY4OTIzNjE4LCJjdXN0b206cGF5b
+WVudF9wcm92aWRlciI6IlNUUklQRSIsImV4cCI6MTU2ODkyNzIxOCwiaWF0IjoxNTY4OTIzNjE4LCJlbWFpbCI6Imoub3N1bGxpd
+mFuNDIrdHlwZXRlc3RAZ21haWwuY29tIn0.F-cDn0jtGKfS4KRypDxuOGOrrmM94nAwpQn1_JEZxvbCD2sab3HvqpO2Fwq1L2OLC
+1qO4ecMXp1oV6_TBp6VJp_ZOPfxU9dhSYO7VJZ8p46L-7DEE96dFzVm86j1G0kAxa9pt3Tx7DSWzJKFnfzlJ5869maqon8QSpr_i
+HeQCLwSRfbubaQZHmIQHCTWshD8DzznnxxV1O9dy1WbFGq5AjEnPdNg9La2r9qAZI_ifzSIdPcpEJIdE8_f_ixwdrzkDYnpEVfIE
+EdzfBxpCKCPaZIPr68SolHMgmzriWCnKo5Ie06sQ2-URQI8KpikoN4VcwvYIlKCAg2QqyvKzJJpSw",
+    "RefreshToken":
+"eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.w1VxJOwf12FCQUyDy7zTFJoGO-mi1vjAlgNp
+qogM-QOzGoK53TA0EJUS1t1fsTT0o0oAbx9l7m15pAw2cl_dpjSRRvknYd4hmZocQLdB7g9ZuUaah7qoziVaEJ5WqtPBvP26R8TI
+Oo6jCTMBdNVhsGT6YWGyVFp4doITWjIGHeWuSJAg_G3LpDDweVY3l7E6qKdrqLXAmKDBuaCroNsD0zNBkyQQduLX9-eDUgTTYvS_
+apX4FH4Cr6_CBakjsN4Rr59yQqm1BOOlEG0dKPHPT5pF6w1DYOqRnJ-wDHHJYAB--zzKIPGxU6oQk783flBHMOTXfdqKnlBLmhri
+z9EDDQ.mTfE0sMOs2Rh3dPX.5hFyX3ctjjWkYTJfe3D1VB5zszO1nOYq6n6BILStnmppxCp7T3tVSdprNShbN-KtRQDFFbLummOU
+Q-zU0FTLzbZwTsVjw7Cp_CRe9pGfxIuyokGsomX8a5r8Bq_l-j3YXl69-f2nRC4iA19wtNRnZrIaGVNYx71kVI3rQlDSGs8GPYMC
+VAJ3gsHHTWa9GKwPNv-AUiQKc3LryXfSLGGVHmARHEle6Lts5ICPQ9S4TZCYANPVloTIixn20nZLK7LounQ0u-os0XvfQ_UCvams
+HwguyLTM495LnOyh3Mt8gWI5VEHtknIACxmeKYH0JhDrvSZZ4Di7kVu_GXgP_4oXnjseFNaNz_16wDB_g1iW45UgiE0l60odbFt8
+D8ILwan0VEw0meoq5UWVv8BA0xlbhEDKiLf-LYSCqdrs4sYMgb_Q3pJ0oc1qIaXaBL1Z9wxz-_zzpaIddu2tZzGgy-T2jjGNiTZp
+O7aLDP0ZbLC7KrVg4c4RK1zEhaaro0puPxfMCKpdvWqEANiFf5m5Ob4HF0IxHEDcjZC6BRkWbylMiPViuydXfUsARu1M6E5SU_9Z
+Sp_okZgDxs7jtfvT6MImjXsjBthoEoltUhhrUWHRYh5AYhlP07jfKYmZilznsb0613MupiPf2FatYu6zq-qcMJlI-p7MpBaWEKdf
+A9YRcBKE4aETRA_WMLTYYfkhQ2CI9UM6VZ8G-73PkmzD55qbTyZK4EI_TYLrqE-A4BkLLJVLa392SflZ_u6LfGfDFX_oTh5bnTc4
+uC6m02LrCpbH9naMYqZxlOSbcDthr4gi9ctBkLXb3KJJrMf9MWmJRs2B_Sb7FaeZP5kwLa9SwbT51sdQTYYJrL5wtnny0nCRzltz
+_ChhlVEW7eHQHZcSphvEI2ESfx32BL7r_4kubrgjhZMJUkCEDvlrUAw_XbJs4EL7Oz4hBTcEjQu8-3gT7xGwDo5JSWifhFVn1a1R
+9Uztf5WgMNDZdg7s7Eh2jLF78w2pc7ZCQmxp7KbiSB5vjmosaYS0AAPaP88S0Tpx2p0t4M7qubmgbRrhFm1knFURJrI0wId4JxO8
+6LlS9JwQInz8VjRMWTn3qus_wOPY_LusDN7GitAsoL_KMW7pBDHzsOiFA4xprL5RD22s52Qr-8Q7cvAtSg7iSOp4d-w6Y9Uw0MJE
+Y_exCdFWjx7ywtGTYxxWaUPSoLW4qfG8o3V9u7QVRePkkzWYawtm3oQEqeKdKIF4ZuQG18IurltX-tLy0eGcASFwXTKlCFhe96Va
+lIYoL9topEpZz7GzBXM_0ANEfXeJpP98Y5i5cQz_nmFzV9fp7PWimzLPq9WtnQ._KEufDMjZ7aMnOKiopRWJA",
+    "User": {
+      "Username": "4d2bf50a-8d67-4bf6-85a2-f0a096c27f4a",
+      "Email": "j.osullivan42+typetest@gmail.com",
+      "UserAttributes": {
+        "custom:payment_provider": "STRIPE",
+        "custom:payment_status": "ACTIVE",
+        "custom:standard_limit": "2",
+        "custom:professional_limit": "0",
+        "custom:enterprise_limit": "0",
+        "sub": "4d2bf50a-8d67-4bf6-85a2-f0a096c27f4a",
+        "email": "j.osullivan42+typetest@gmail.com"
+      }
+    },
+    "ExpiresAt": "2019-09-19T21:06:59.048Z"
+  },
+  "err": null
+}
+
+
+
+[2K[1A[2K[1A[2K[G
+

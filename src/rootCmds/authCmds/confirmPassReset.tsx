@@ -5,15 +5,16 @@ import { RootResources, Auth } from '@eximchain/dappbot-types/spec/methods';
 import { PrettyRequest, App } from '../../ui';
 import { commandFromSampleArgs, describePositionalArgs } from '../../services/util';
 import { ArgShape } from '../../cli';
+import { ConfirmPassReset } from '@eximchain/dappbot-types/spec/methods/auth';
 
 export const commandName = `${RootResources.auth}/confirmPassReset`;
 
-export const command = commandFromSampleArgs(commandName, Auth.ConfirmPassReset.newArgs());
+export const command = commandFromSampleArgs(commandName, ConfirmPassReset.newArgs());
 
 export const desc = 'Confirm a password reset.';
 
 export function builder(yargs: Argv) {
-  describePositionalArgs(yargs, Auth.ConfirmPassReset.newArgs(), {
+  describePositionalArgs(yargs, ConfirmPassReset.newArgs(), {
     'username': 'Your account email.',
     'passwordResetCode': 'The code you received in your email.',
     'newPassword': 'A new password for your account; at least 8 characters long.'
@@ -23,8 +24,8 @@ export function builder(yargs: Argv) {
 export function handler(args: ArgShape<Auth.ConfirmPassReset.Args>) {
   render(App({
     args,
-    renderFunc: ({ API, opts }) => {
-      let { username, newPassword, passwordResetCode } = opts;
+    renderFunc: ({ API }) => {
+      let { username, newPassword, passwordResetCode } = args;
       let req = () => API.auth.confirmPasswordReset.call({
         username, newPassword, passwordResetCode
       })

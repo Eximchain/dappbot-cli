@@ -1,20 +1,11 @@
-import React, { FC, useState, useEffect, cloneElement } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { Box, Text, Color, Static } from 'ink';
 import Spinner from 'ink-spinner';
+import BoxPads from './BoxPads';
 
 export interface PrettyRequestProps<ResponseType=any> {
   req: () => Promise<ResponseType>
   onComplete?: (response:ResponseType) => void
-}
-
-const BoxPads:FC = (props) => {
-  return (
-    <>
-    <Box height={1} />
-    { props.children }
-    <Box height={1} />
-    </>
-  )
 }
 
 export const PrettyRequest:FC<PrettyRequestProps> = ({ req, onComplete }) => {
@@ -33,8 +24,10 @@ export const PrettyRequest:FC<PrettyRequestProps> = ({ req, onComplete }) => {
         })
         .catch((err:any) => {
           let { statusCode, body } = err.response;
+          let { message } = err;
+          console.log('Err message: ',err.message);
           setIsErr(true);
-          setResult({ statusCode, body })
+          setResult(err)
           setIsLoading(false);
         })
     } else {
@@ -61,7 +54,7 @@ export const PrettyRequest:FC<PrettyRequestProps> = ({ req, onComplete }) => {
   let header, resObj;
   if (isErr) {
     header = <Color red>Error: {result.statusCode}</Color>;
-    resObj = typeof result.body === 'string' ? JSON.parse(result.body) : result.body;
+    resObj = result;
   } else {
     header = <Color green>Result:</Color>;
     resObj = typeof result === 'string' ? JSON.parse(result) : result;
