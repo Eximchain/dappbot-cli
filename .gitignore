@@ -2,3 +2,4 @@ node_modules
 build
 .editorconfig
 .gitattributes
+./dappbotAuthData.json
