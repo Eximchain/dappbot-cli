@@ -1,12 +1,10 @@
 import React from 'react';
-import fs from 'fs';
 import { Argv, Options } from 'yargs';
-import { render } from 'ink';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData } from '../../services/util';
+import { requireAuthData, fastRender } from '../../services/util';
 import { ArgShape, DappNameArg } from '../../cli';
 import { CreateDapp } from '@eximchain/dappbot-types/spec/methods/private';
-import { App, PrettyRequest } from '../../ui';
+import { App, PrettyRequest, ApiMethodLabel } from '../../ui';
 import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
 
 export const command = `${RootResources.private}/createDapp <DappName>`;
@@ -20,8 +18,8 @@ export const desc = 'Create a new Dapp.';
 // or something.
 export const GuardianURL = 'https://example.com';
 
-export function BaseOptions(addtlOptions:Options):Options {
-  let baseOptions:Options = {
+export function BaseOptions(addtlOptions: Options): Options {
+  let baseOptions: Options = {
     demandOption: true,
     requiresArg: true,
     group: 'Arguments:'
@@ -29,7 +27,7 @@ export function BaseOptions(addtlOptions:Options):Options {
   return Object.assign(baseOptions, addtlOptions);
 }
 
-export function builder(yargs:Argv) {
+export function builder(yargs: Argv) {
   yargs
     .middleware(requireAuthData)
     .positional('DappName', {
@@ -37,7 +35,7 @@ export function builder(yargs:Argv) {
       describe: 'The name for your new Dapp.'
     })
     .options({
-      'AbiPath' : BaseOptions({
+      'AbiPath': BaseOptions({
         type: 'string',
         alias: 'b',
         normalize: true
@@ -58,8 +56,8 @@ export function builder(yargs:Argv) {
     });
 }
 
-export function handler(args:ArgShape<CreateDapp.Args & DappNameArg>) {
-  render(
+export function handler(args: ArgShape<CreateDapp.Args & DappNameArg>) {
+  fastRender(
     <App args={args} renderFunc={({ API }) => {
       const { Web3URL, Tier, ContractAddr, DappName } = args;
       if (!args.AbiFile) {
@@ -72,9 +70,11 @@ export function handler(args:ArgShape<CreateDapp.Args & DappNameArg>) {
       // TODO: Validate Abi, just for sanity's sake
 
       return (
-        <PrettyRequest req={() => API.private.createDapp.call(DappName, {
-          Web3URL, GuardianURL, ContractAddr, Tier, Abi
-        })} />
+        <PrettyRequest
+          operation={ApiMethodLabel(CreateDapp.HTTP, CreateDapp.Path(DappName))}
+          req={() => API.private.createDapp.resource(DappName, {
+            Web3URL, GuardianURL, ContractAddr, Tier, Abi
+          })} />
       )
     }} />
   )

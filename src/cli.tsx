@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 import yargs, { Arguments } from 'yargs';
-import { MethodAbi } from 'ethereum-types';
-import User from '@eximchain/dappbot-types/spec/user';
 import fs from 'fs';
 import path from 'path';
-import { loadFileMiddleware, checkDefaultAuthMiddleware } from './services/util';
+import { loadFileFromPath, addDefaultAuthIfPresent } from './services/util';
 
 const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
@@ -33,8 +31,8 @@ yargs
 			description: 'The path to a file with saved DappBot auth data.'
 		}
 	})
-	.middleware(checkDefaultAuthMiddleware)
-	.middleware(loadFileMiddleware)
+	.middleware(addDefaultAuthIfPresent)
+	.middleware(loadFileFromPath)
 	.commandDir('rootCmds')
 	.usage('Usage: dappbot <command> [args]')
 	.demandCommand(2)

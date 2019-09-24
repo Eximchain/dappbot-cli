@@ -1,9 +1,14 @@
 import { Argv, PositionalOptions } from "yargs";
+import { render } from 'ink';
 import fs from 'fs';
 import path from 'path';
 import User from '@eximchain/dappbot-types/spec/user';
-import { ArgShape } from "../cli";
+import { ArgShape, DEFAULT_DATA_PATH } from "../cli";
 
+export const fastRender:typeof render = (tree) => {
+  // @ts-ignore Types don't know about fastmode
+  return render(tree, { experimental: true })
+}
 /**
  * Given a desired command name and an example of the argument shape
  * the command needs to output, return a yargs `command` string
@@ -56,14 +61,14 @@ export function describePositionalArgs<Shape extends object>(yargs:Argv, argShap
 }
 
 /**
- * Listen for any options whose name ends in "Path", and if found,
+ * Middlware: Listen for any options whose name ends in "Path", and if found,
  * read the file's contents as a string and add it as an argument
  * whose name ends in "File".  For instance, "authPath" will yield
  * an "authFile" string, which can be JSON.parse()d to get the
  * actual authData.
  * @param args 
  */
-export function loadFileMiddleware(args:ArgShape): ArgShape {
+export function loadFileFromPath(args:ArgShape): ArgShape {
   const pathKeys = Object.keys(args).filter(key => key.indexOf('Path') > -1);
   pathKeys.forEach(pathKey => {
     const fullPath = path.resolve(process.cwd(), args[pathKey]);
@@ -78,9 +83,9 @@ export function loadFileMiddleware(args:ArgShape): ArgShape {
  * 
  * @param args 
  */
-export function checkDefaultAuthMiddleware(args:ArgShape): ArgShape {
+export function addDefaultAuthIfPresent(args:ArgShape): ArgShape {
   if (!args.authPath) {
-    const defaultPath = path.resolve(process.cwd(), './dappbotAuthData.json');
+    const defaultPath = path.resolve(process.cwd(), DEFAULT_DATA_PATH);
     if (fs.existsSync(defaultPath)) {
       args.authPath = defaultPath;
     }
@@ -99,3 +104,9 @@ export function requireAuthData(args:ArgShape): ArgShape {
   }
   return args;
 }
+
+// export function refreshAuthFile(args:ArgShape): ArgShape {
+//   if (!args.authFile) return args;
+//   const authData = JSON.parse(args.authFile);
+//   const needRefresh = new API({ authData, })
+// }

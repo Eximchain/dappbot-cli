@@ -1,10 +1,10 @@
 import React from 'react';
 import { Argv } from 'yargs';
-import { render } from 'ink';
-import { App, PrettyRequest } from '../../ui';
+import { App, PrettyRequest, ApiMethodLabel } from '../../ui';
 import { ArgShape, DappNameArg } from '../../cli';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData } from '../../services/util';
+import { requireAuthData, fastRender } from '../../services/util';
+import { DeleteDapp } from '@eximchain/dappbot-types/spec/methods/private';
 
 export const command = `${RootResources.private}/deleteDapp <DappName>`;
 
@@ -15,11 +15,13 @@ export function builder(yargs:Argv) {
 }
 
 export function handler(args:ArgShape<DappNameArg>) {
-  render(
+  fastRender(
     <App args={args} renderFunc={({ API }) => {
       const DappName = args.DappName;
       return (
-        <PrettyRequest req={() => API.private.deleteDapp.call(DappName)} />
+        <PrettyRequest 
+          operation={ApiMethodLabel(DeleteDapp.HTTP, DeleteDapp.Path(DappName))}
+          req={() => API.private.deleteDapp.resource(DappName)} />
       )
     }} />
   )

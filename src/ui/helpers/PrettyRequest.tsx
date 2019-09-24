@@ -1,76 +1,39 @@
-import React, { FC, useState, useEffect } from 'react';
-import { Box, Text, Color, Static } from 'ink';
-import Spinner from 'ink-spinner';
-import BoxPads from './BoxPads';
+import React, { FC, useEffect } from 'react';
+import { Resource, useResource } from 'react-request-hook';
+import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
+import { Loader, ErrorBox, SuccessBox } from '.';
 
 export interface PrettyRequestProps<ResponseType=any> {
-  req: () => Promise<ResponseType>
+  req: () => Resource<ResponseType>
   onComplete?: (response:ResponseType) => void
+  operation?: string
 }
 
-export const PrettyRequest:FC<PrettyRequestProps> = ({ req, onComplete }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isErr, setIsErr] = useState(false);
-  const [result, setResult] = useState(null as any);
+export const PrettyRequest:FC<PrettyRequestProps> = ({ req, onComplete, operation }) => {
+  const [response, request] = useResource(req);
+  const { isLoading, data, error } = response;
+  
+  useEffect(function callOnStart(){
+    request();
+  }, [])
 
-  useEffect(function makeRequest(){
-    if (isLoading) return;
-    if (result === null) {
-      setIsLoading(true);
-      req()
-        .then((res:any) => {
-          setResult(res)
-          setIsLoading(false);
-        })
-        .catch((err:any) => {
-          let { statusCode, body } = err.response;
-          let { message } = err;
-          console.log('Err message: ',err.message);
-          setIsErr(true);
-          setResult(err)
-          setIsLoading(false);
-        })
-    } else {
-      if (onComplete) {
-        onComplete(result);
-      }
-    }
-  }, [isLoading, result])
+  useEffect(function handleSuccess(){
+    if (data && isSuccessResponse(data) && onComplete) onComplete(data.data);
+  }, [data])
 
-  if (isLoading) {
+  if (isLoading || (!data && !error)) {
     return (
-      <BoxPads>
-        <Text><Spinner type='dots' />Your request is in the air...</Text>
-      </BoxPads>
+      <Loader message="Your request is in the air..." />
     )
   }
-  if (result === null) {
-    return (
-      <BoxPads>
-        <Text><Spinner type='dots' />About to make the request...</Text>
-      </BoxPads>
-    )
-  }
-  let header, resObj;
-  if (isErr) {
-    header = <Color red>Error: {result.statusCode}</Color>;
-    resObj = result;
-  } else {
-    header = <Color green>Result:</Color>;
-    resObj = typeof result === 'string' ? JSON.parse(result) : result;
-  }
-  return (
-    <BoxPads>
-      <Static>
-      <Box paddingTop={3}>
-        <Text>{ header }{'\n'}</Text>
-      </Box>
-      <Box textWrap='wrap'>
-        <Text>
-          { JSON.stringify(resObj, null, 2)+'\n' }
-        </Text>
-      </Box>
-    </Static>
-    </BoxPads>
+
+  return error ? (
+    <ErrorBox permanent
+      errMsg={error.data.err.message} 
+      operation={operation} />
+  ) : (
+    <SuccessBox permanent
+      result={data.data} 
+      operation={operation}  />
   )
 }

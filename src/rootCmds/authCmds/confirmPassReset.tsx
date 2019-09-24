@@ -1,9 +1,8 @@
 import React from 'react';
 import { Argv } from 'yargs';
-import { render } from 'ink';
-import { RootResources, Auth } from '@eximchain/dappbot-types/spec/methods';
-import { PrettyRequest, App } from '../../ui';
-import { commandFromSampleArgs, describePositionalArgs } from '../../services/util';
+import { RootResources } from '@eximchain/dappbot-types/spec/methods';
+import { PrettyRequest, App, ApiMethodLabel } from '../../ui';
+import { commandFromSampleArgs, describePositionalArgs, fastRender } from '../../services/util';
 import { ArgShape } from '../../cli';
 import { ConfirmPassReset } from '@eximchain/dappbot-types/spec/methods/auth';
 
@@ -21,16 +20,17 @@ export function builder(yargs: Argv) {
   });
 }
 
-export function handler(args: ArgShape<Auth.ConfirmPassReset.Args>) {
-  render(App({
+export function handler(args: ArgShape<ConfirmPassReset.Args>) {
+  fastRender(App({
     args,
     renderFunc: ({ API }) => {
       let { username, newPassword, passwordResetCode } = args;
-      let req = () => API.auth.confirmPasswordReset.call({
-        username, newPassword, passwordResetCode
-      })
       return (
-        <PrettyRequest req={req} />
+        <PrettyRequest
+          operation={ApiMethodLabel(ConfirmPassReset.HTTP, ConfirmPassReset.Path)} 
+          req={() => API.auth.confirmPasswordReset.resource({
+            username, newPassword, passwordResetCode
+          })} />
       )
     }
   }

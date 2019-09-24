@@ -2,11 +2,12 @@ import React, { FC, useState, useEffect } from 'react';
 import path from 'path';
 import fs from 'fs';
 import Spinner from 'ink-spinner';
+import { useResource } from 'react-request-hook';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
-import { BoxPads, TextBox } from './helpers';
+import { BoxPads, TextBox, Loader } from './helpers';
 import { Box, Text, Static } from 'ink';
 import { DEFAULT_DATA_PATH } from '../cli';
 
@@ -14,77 +15,60 @@ export interface LoginFlowProps {
   API: DappbotAPI
 }
 
-export enum LoginFlowStages {
-  email = 'email',
-  password = 'password',
-  path = 'path',
-  loading = 'loading',
-  complete = 'complete'
-}
-
 export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [dataPath, setDataPath] = useState(DEFAULT_DATA_PATH);
-  const [stage, setStage] = useState(LoginFlowStages.email);
+  const [loginResult, requestLogin] = useResource(API.auth.login.resource);
+  const { data, isLoading, error } = loginResult;
+  
 
-  useEffect(function makeLoginRequest(){
-    if (stage !== LoginFlowStages.loading) return;
-    API.auth.login.call({ username, password })
-      .then(function writeToFile(response) {
-        if (Responses.isSuccessResponse(response) && User.isAuthData(response.data)) {
-          const authData = response.data;
-          const authPath = path.resolve(process.cwd(), dataPath);
-          fs.writeFileSync(authPath, JSON.stringify(authData, null, 2));
-          setStage(LoginFlowStages.complete);
-        };
-      })
-      .catch((err) => {
-        console.log('Error making request: ');
-        console.log(JSON.stringify(err, null, 2));
-        process.exit(1);
-      })
-  }, [stage])
+  useEffect(function handleLoginResponse(){
+    if (
+      Responses.isSuccessResponse(data) &&
+      User.isAuthData(data.data)
+    ) {
+      const authData = data.data;
+      const authPath = path.resolve(process.cwd(), dataPath);
+      fs.writeFileSync(authPath, JSON.stringify(authData, null, 2));
+    }
+  }, [data, dataPath])
 
-  if (stage === LoginFlowStages.email) {
+  if (username === '') {
     return (
       <ArgPrompt name='email' 
-        initialValue='' 
         key='emailPrompt'
-        withResult={(val)=>{
-          setUsername(val);
-          setStage(LoginFlowStages.password)
-        }}/>
+        withResult={setUsername}/>
     )
-  } else if (stage === LoginFlowStages.password) {
+  } else if (password === '') {
     return (
-      <ArgPrompt name='password' 
-        hideVal={true}
-        initialValue=''
+      <ArgPrompt name='password' hideVal
         key='passwordPrompt'
-        withResult={(val)=>{
-          setPassword(val);
-          setStage(LoginFlowStages.path);
-        }}/>
+        withResult={setPassword}/>
     )
-  } else if (stage === LoginFlowStages.path) {
+  } else if (!isLoading && !data && !error) {
     return (
       <ArgPrompt name='Path for auth data' 
-        isDefault={true}
-        initialValue='./dappbotAuthData.json'
+        defaultValue={DEFAULT_DATA_PATH}
         withResult={(val) => {
           setDataPath(val);
-          setStage(LoginFlowStages.loading);
+          requestLogin({ username, password })
         }} />
     )
-  } else if (stage === LoginFlowStages.loading) {
+  } else if (isLoading) {
     return (
-      <BoxPads>
-        <Box marginLeft={1}>
-          <Spinner type='dots' />
-        </Box>
-        <Text>Logging you into DappBot...</Text>
-      </BoxPads>
+      <Loader message={"Logging you into DappBot..."} />
+    )
+  } else if (error) {
+    return (
+      <Static>
+        <BoxPads>
+          Error logging you in:
+        </BoxPads>
+        <Text>
+          { JSON.stringify(error.data, null, 2) }
+        </Text>
+      </Static>
     )
   } else {
     let followonMsg = dataPath === DEFAULT_DATA_PATH ?

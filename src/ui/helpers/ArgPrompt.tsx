@@ -6,11 +6,10 @@ import { BoxPads } from '.';
 
 export type ArgPromptProps = {
   name: string
-  initialValue: string
   withResult:(val:string) => void
   
+  defaultValue?: string
   description?: string
-  isDefault?: boolean
   hideVal?: boolean
 
   /**
@@ -22,10 +21,10 @@ export type ArgPromptProps = {
 }
 
 export const ArgPrompt:FC<ArgPromptProps> = (props) => {
-  const { name, initialValue, isDefault, withResult } = props;
-  const [value, setValue] = useState(initialValue);
+  const { name, defaultValue, withResult } = props;
+  const [value, setValue] = useState(defaultValue || '');
   let basePrompt = `${name}`;
-  if (isDefault) basePrompt += ' (Press enter to accept default)';
+  if (defaultValue) basePrompt += ' (Press enter to accept default)';
   basePrompt += ':';
   let inputProps:InkTextInputProps = {
     value: value,

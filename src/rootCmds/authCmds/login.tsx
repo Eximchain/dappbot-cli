@@ -1,15 +1,10 @@
-
 import React from 'react';
 import { Argv } from 'yargs';
-import { render } from 'ink';
-import { PrettyRequest, App } from '../../ui';
-import Responses from '@eximchain/dappbot-types/spec/responses';
-import User from '@eximchain/dappbot-types/spec/user';
+import { PrettyRequest, App, ApiMethodLabel } from '../../ui';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { commandFromSampleArgs, describePositionalArgs } from '../../services/util';
+import { commandFromSampleArgs, describePositionalArgs, fastRender } from '../../services/util';
 import { ArgShape } from '../../cli';
 import { Login } from '@eximchain/dappbot-types/spec/methods/auth';
-
 
 export const commandName = `${RootResources.auth}/login`;
 
@@ -22,14 +17,15 @@ export function builder(yargs: Argv) {
 }
 
 export function handler(args: ArgShape<Login.Args>) {
-  render(
+  fastRender(
     <App args={args} renderFunc={({ API }) => {
       let { username, password } = args;
-      let req = () => API.auth.login.call({
-        username, password
-      })
       return (
-        <PrettyRequest req={req} />
+        <PrettyRequest
+          operation={ApiMethodLabel(Login.HTTP, Login.Path)}
+          req={() => API.auth.login.resource({
+            username, password
+          })} />
       )
     }} />
   )

@@ -1,13 +1,11 @@
 import React from 'react';
-import fs from 'fs';
 import { Argv } from 'yargs';
-import { render } from 'ink';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData } from '../../services/util';
+import { requireAuthData, fastRender } from '../../services/util';
 import { BaseOptions, GuardianURL } from './createDapp';
 import { UpdateDapp } from '@eximchain/dappbot-types/spec/methods/private';
 import { DappNameArg, ArgShape } from '../../cli';
-import { PrettyRequest, App } from '../../ui';
+import { PrettyRequest, App, ApiMethodLabel } from '../../ui';
 
 export const command = `${RootResources.private}/updateDapp <DappName>`;
 
@@ -41,7 +39,7 @@ export function builder(yargs:Argv) {
 }
 
 export function handler(args:ArgShape<UpdateDapp.Args & DappNameArg>) {
-  render(
+  fastRender(
     <App args={args} renderFunc={({ API }) => {
       const { Web3URL, ContractAddr, DappName } = args;
       let updateArg = {} as UpdateDapp.Args;
@@ -57,7 +55,9 @@ export function handler(args:ArgShape<UpdateDapp.Args & DappNameArg>) {
       // TODO: Validate Abi, just for sanity's sake
 
       return (
-        <PrettyRequest req={() => API.private.updateDapp.call(DappName, updateArg)} />
+        <PrettyRequest 
+          operation={ApiMethodLabel(UpdateDapp.HTTP, UpdateDapp.Path(DappName))}
+          req={() => API.private.updateDapp.resource(DappName, updateArg)} />
       )
     }} />
   )

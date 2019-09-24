@@ -1,9 +1,10 @@
 import React from 'react';
 import { Argv } from 'yargs';
-import { render } from 'ink';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { PrettyRequest, App } from '../../ui';
+import { PrettyRequest, App, ApiMethodLabel } from '../../ui';
 import { ArgShape, DappNameArg } from '../../cli';
+import { fastRender } from '../../services/util';
+import { ViewDapp } from '@eximchain/dappbot-types/spec/methods/public';
 
 export const commandName = `${RootResources.public}/viewDapp`;
 
@@ -20,11 +21,13 @@ export function builder(yargs: Argv) {
 }
 
 export function handler(args: ArgShape<DappNameArg>) {
-  render(
+  fastRender(
     <App args={args} renderFunc={({ API }) => {
       const DappName = args.DappName;
       return (
-        <PrettyRequest req={() => API.public.viewDapp.call(DappName)} />
+        <PrettyRequest  
+          operation={ApiMethodLabel(ViewDapp.HTTP, ViewDapp.Path(DappName))} 
+          req={() => API.public.viewDapp.resource(DappName)} />
       )
     }} />
   )
