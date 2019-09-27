@@ -1,17 +1,17 @@
 import React from 'react';
 import { Argv } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender } from '../../services/util';
+import { requireAuthData, fastRender, cleanExit } from '../../services/util';
 import { BaseOptions, GuardianURL } from './createDapp';
 import { UpdateDapp } from '@eximchain/dappbot-types/spec/methods/private';
-import { DappNameArg, ArgShape } from '../../cli';
-import { PrettyRequest, App, ApiMethodLabel } from '../../ui';
+import { DappNameArg, ArgShape, UniversalArgs } from '../../cli';
+import { PrettyRequest, App, ApiMethodLabel, ErrorBox } from '../../ui';
 
 export const command = `${RootResources.private}/updateDapp <DappName>`;
 
 export const desc = 'Update one of your Dapps.';
 
-export function builder(yargs:Argv) {
+export function builder(yargs:Argv<UniversalArgs>) {
   yargs
   .middleware(requireAuthData)
   .positional('DappName', {
@@ -39,26 +39,27 @@ export function builder(yargs:Argv) {
 }
 
 export function handler(args:ArgShape<UpdateDapp.Args & DappNameArg>) {
-  fastRender(
-    <App args={args} renderFunc={({ API }) => {
-      const { Web3URL, ContractAddr, DappName } = args;
-      let updateArg = {} as UpdateDapp.Args;
-      if (Web3URL) updateArg.Web3URL = Web3URL;
-      if (ContractAddr) updateArg.ContractAddr = ContractAddr;
-      if (args.AbiFile) updateArg.Abi = args.AbiFile;
+  const { Web3URL, ContractAddr, DappName } = args;
+  let updateArg = {} as UpdateDapp.Args;
+  if (Web3URL) updateArg.Web3URL = Web3URL;
+  if (ContractAddr) updateArg.ContractAddr = ContractAddr;
+  if (args.AbiFile) updateArg.Abi = args.AbiFile;
 
-      if (Object.keys(updateArg).length === 0) {
-        console.log('No update keys specified; please include one of the options.');
-        process.exit(1);
-      }
-
-      // TODO: Validate Abi, just for sanity's sake
-
-      return (
-        <PrettyRequest 
-          operation={ApiMethodLabel(UpdateDapp.HTTP, UpdateDapp.Path(DappName))}
-          req={() => API.private.updateDapp.resource(DappName, updateArg)} />
+  if (Object.keys(updateArg).length === 0) {
+    return (
+      fastRender(
+        <ErrorBox errMsg={'No update keys specified; please include one of the options.'} />
       )
-    }} />
+    )
+  }
+
+  // TODO: Validate Abi, just for sanity's sake
+
+  fastRender(
+    <App args={args} renderFunc={({ API }) => (
+      <PrettyRequest 
+        operation={ApiMethodLabel(UpdateDapp.HTTP, UpdateDapp.Path(DappName))}
+        req={() => API.private.updateDapp.resource(DappName, updateArg)} />
+    )} />
   )
 }

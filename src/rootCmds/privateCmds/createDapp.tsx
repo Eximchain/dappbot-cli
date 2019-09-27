@@ -1,10 +1,10 @@
 import React from 'react';
 import { Argv, Options } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender } from '../../services/util';
-import { ArgShape, DappNameArg } from '../../cli';
+import { requireAuthData, fastRender, cleanExit } from '../../services/util';
+import { ArgShape, DappNameArg, UniversalArgs } from '../../cli';
 import { CreateDapp } from '@eximchain/dappbot-types/spec/methods/private';
-import { App, PrettyRequest, ApiMethodLabel } from '../../ui';
+import { App, PrettyRequest, ApiMethodLabel, ErrorBox } from '../../ui';
 import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
 
 export const command = `${RootResources.private}/createDapp <DappName>`;
@@ -27,7 +27,7 @@ export function BaseOptions(addtlOptions: Options): Options {
   return Object.assign(baseOptions, addtlOptions);
 }
 
-export function builder(yargs: Argv) {
+export function builder(yargs:Argv<UniversalArgs>) {
   yargs
     .middleware(requireAuthData)
     .positional('DappName', {
@@ -57,18 +57,16 @@ export function builder(yargs: Argv) {
 }
 
 export function handler(args: ArgShape<CreateDapp.Args & DappNameArg>) {
+  const { Web3URL, Tier, ContractAddr, DappName } = args;
+  if (!args.AbiFile) {
+    return fastRender(
+      <ErrorBox errMsg={"An abiFile must be present; it should exist if you have included a valid --abiPath."} />
+    )
+  }
+  const Abi = args.AbiFile;
+  // TODO: Validate Abi, just for sanity's sake
   fastRender(
     <App args={args} renderFunc={({ API }) => {
-      const { Web3URL, Tier, ContractAddr, DappName } = args;
-      if (!args.AbiFile) {
-        console.error("An abiFile must be present; it should exist if you have included --abiPath.");
-        process.exit(1);
-        throw new Error();
-      }
-      const Abi = args.AbiFile;
-
-      // TODO: Validate Abi, just for sanity's sake
-
       return (
         <PrettyRequest
           operation={ApiMethodLabel(CreateDapp.HTTP, CreateDapp.Path(DappName))}

@@ -15,6 +15,8 @@ export interface UniversalArgs {
 	authFile?: string
 	AbiPath?: string
 	AbiFile?: string
+	apiUrl: string
+	hubUrl: string
 }
 
 export interface AdditionalArgs {
@@ -29,6 +31,14 @@ yargs
 			alias: 'a',
 			normalize: true,
 			description: 'The path to a file with saved DappBot auth data.'
+		},
+		apiUrl: {
+			description: 'Your DappBot API endpoint.',
+			default: 'https://cli-api.eximchain-dev.com'
+		},
+		hubUrl: {
+			description: 'The URL for DappHub.',
+			default: 'https://cli-hub.eximchain-dev.com'
 		}
 	})
 	.middleware(addDefaultAuthIfPresent)

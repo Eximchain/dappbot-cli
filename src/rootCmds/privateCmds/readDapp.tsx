@@ -3,14 +3,14 @@ import { Argv } from 'yargs';
 import { App, PrettyRequest, ApiMethodLabel } from '../../ui';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
 import { requireAuthData, fastRender } from '../../services/util';
-import { ArgShape, DappNameArg } from '../../cli';
+import { ArgShape, DappNameArg, UniversalArgs } from '../../cli';
 import { ReadDapp } from '@eximchain/dappbot-types/spec/methods/private';
 
 export const command = `${RootResources.private}/readDapp <DappName>`;
 
 export const desc = 'Read the details for one of your Dapps.';
 
-export function builder(yargs: Argv) {
+export function builder(yargs: Argv<UniversalArgs>) {
   yargs
     .middleware(requireAuthData)
     .positional('DappName', {

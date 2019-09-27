@@ -3,14 +3,14 @@ import { Argv } from 'yargs';
 import { App, PrettyRequest, ApiMethodLabel } from '../../ui';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
 import { requireAuthData, fastRender } from '../../services/util';
-import { ArgShape } from '../../cli';
+import { ArgShape, UniversalArgs } from '../../cli';
 import { ListDapps } from '@eximchain/dappbot-types/spec/methods/private';
 
 export const command = `${RootResources.private}/listDapps`;
 
 export const desc = 'List your Dapps.';
 
-export function builder(yargs: Argv) {
+export function builder(yargs: Argv<UniversalArgs>) {
   yargs.middleware(requireAuthData);
 }
 

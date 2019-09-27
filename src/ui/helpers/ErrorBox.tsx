@@ -16,7 +16,7 @@ export const ErrorBox: FC<ErrorBoxProps> = ({ errMsg: message, permanent, operat
         <Text bold>{' ERROR '}</Text>
       </Color>
       {' '}
-      { operation ? `${operation}: ` : ''}
+      { operation ? `${operation} ` : ''}
       {message}
     </BoxPads>
     </Box>

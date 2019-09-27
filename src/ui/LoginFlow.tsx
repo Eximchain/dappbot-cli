@@ -7,7 +7,7 @@ import DappbotAPI from '@eximchain/dappbot-api-client';
 import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
-import { BoxPads, TextBox, Loader } from './helpers';
+import { BoxPads, TextBox, Loader, ErrorBox, errMsgFromResource } from './helpers';
 import { Box, Text, Static } from 'ink';
 import { DEFAULT_DATA_PATH } from '../cli';
 
@@ -61,14 +61,7 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
     )
   } else if (error) {
     return (
-      <Static>
-        <BoxPads>
-          Error logging you in:
-        </BoxPads>
-        <Text>
-          { JSON.stringify(error.data, null, 2) }
-        </Text>
-      </Static>
+      <ErrorBox errMsg={errMsgFromResource(error)} permanent />
     )
   } else {
     let followonMsg = dataPath === DEFAULT_DATA_PATH ?
