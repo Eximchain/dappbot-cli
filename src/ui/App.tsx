@@ -1,12 +1,11 @@
 import React, { useState, PropsWithChildren, ReactElement, useEffect } from 'react';
 import path from 'path';
 import fs from 'fs';
-import { Text } from 'ink';
 import DappbotAPI from '@eximchain/dappbot-api-client';
-import User, { isAuthData, newAuthData, AuthData } from '@eximchain/dappbot-types/spec/user';
+import { newAuthData, AuthData } from '@eximchain/dappbot-types/spec/user';
 import { ArgShape, AdditionalArgs } from '../cli';
-import { ErrorBox, Loader, BoxPads } from './helpers';
-import { RequestProvider, useResource } from 'react-request-hook';
+import { Loader } from './helpers';
+import { RequestProvider } from 'react-request-hook';
 import axios from 'axios';
 
 export type RenderFuncProps<Additional extends AdditionalArgs = AdditionalArgs> = (props: {
