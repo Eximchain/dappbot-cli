@@ -1,35 +1,48 @@
 {
-	"name": "dappbot-cli",
-	"version": "0.0.0",
+	"name": "@eximchain/dappbot-cli",
+	"version": "0.0.1",
 	"license": "MIT",
-	"bin": "build/cli.js",
+	"main": "build/cli.js",
+	"bin": {
+		"dappbot": "build/cli.js"
+	},
 	"engines": {
 		"node": ">=8"
 	},
 	"scripts": {
 		"test": "xo && ava",
-		"build": "tsc"
+		"build": "tsc",
+		"start": "node build/cli.js"
 	},
-	"files": [
-		"cli.js",
-		"ui.js"
-	],
 	"dependencies": {
 		"@eximchain/dappbot-api-client": "^1.1.0",
 		"@eximchain/dappbot-types": "^1.2.5",
 		"@types/ink-spinner": "^2.0.1",
+		"@types/lodash.flatten": "^4.4.6",
+		"@types/lodash.groupby": "^4.6.6",
+		"@types/lodash.omit": "^4.5.6",
 		"@types/node": "^12.7.5",
+		"@types/opn": "^5.5.0",
+		"@types/shelljs": "^0.8.5",
 		"@types/yargs": "^13.0.2",
+		"axios": "^0.19.0",
+		"completarr": "^0.2.2",
+		"ethereum-types": "^2.1.6",
 		"ink": "^2.3.0",
 		"ink-link": "^1.0.0",
-		"ink-select": "^1.2.0",
+		"ink-select-input": "^3.1.2",
 		"ink-spinner": "^3.0.1",
 		"ink-text-input": "^3.2.1",
+		"lodash.flatten": "^4.4.0",
+		"lodash.groupby": "^4.6.0",
+		"lodash.omit": "^4.5.0",
 		"node-fetch": "^2.6.0",
+		"open": "^6.4.0",
 		"password-validator": "^5.0.2",
 		"react": "^16.9.0",
 		"react-request-hook": "^2.1.1",
 		"request": "^2.88.0",
+		"shelljs": "^0.8.3",
 		"yargs": "^14.0.0"
 	},
 	"devDependencies": {
@@ -41,6 +54,7 @@
 		"eslint-plugin-react": "^7.14.3",
 		"eslint-plugin-react-hooks": "^2.0.1",
 		"ink-testing-library": "^1.0.2",
+		"ts-xor": "^1.0.8",
 		"typescript": "^3.6.3",
 		"xo": "^0.24.0"
 	},
