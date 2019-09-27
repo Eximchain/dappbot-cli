@@ -1,9 +1,8 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import SelectInput from 'ink-select-input';
 import flatten from 'lodash.flatten';
-import groupBy from 'lodash.groupby';
-import { Loader, SuccessBox, ArgPrompt } from '../helpers';
-import { TruffleArtifact, ChainIdentities, SupportedChains, ChainIdentity } from '../../services/util';
+import { SuccessBox, ArgPrompt, ChainName, ChainOption } from '../helpers';
+import { TruffleArtifact, ChainIdentities, ChainIdentity, ChainsById } from '../../services/util';
 import { XOR } from 'ts-xor';
 
 export interface StageSelectNetworkProps {
@@ -12,32 +11,23 @@ export interface StageSelectNetworkProps {
   setContractAddr: (addr: string) => void;
 }
 
-const option = (chainId:number, chain?:ChainIdentity) => {
-  return chain ? ({
-    label: `${chain.displayName} - Chain ID ${chain.chainId}`, value: chain.key
-  }) : ({
-    label: `Custom Chain - Chain ID ${chainId}`, value: chainId
-  })
-}
-
 export const StageSelectNetwork: FC<StageSelectNetworkProps> = ({ artifact, setWeb3URL, setContractAddr }) => {
 
   // Compile chainIds present in artifact
   const [needCustomWeb3, setNeedCustomWeb3] = useState(null as XOR<null, boolean>);
   const networkIds = Object.keys(artifact.networks);
-  const supportedChainsById = groupBy(ChainIdentities, identity => identity.chainId);
 
   const networkOptions = networkIds.map(parseInt).map(networkId => {
-    let matchingChains = supportedChainsById[networkId];
+    let matchingChains = ChainsById[networkId];
     if (matchingChains === undefined) {
       // Custom network option
-      return option(networkId);
+      return ChainOption(networkId);
     } else if (matchingChains.length === 1) {
       // Perfect match, simply list option
-      return option(networkId, matchingChains[0]);
+      return ChainOption(networkId, matchingChains[0]);
     } else {
       // Multi-match, must be network 1, return an array of options
-      return matchingChains.map((eachChain) => option(networkId, eachChain))
+      return matchingChains.map((eachChain) => ChainOption(networkId, eachChain))
     }
   })
 

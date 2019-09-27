@@ -5,6 +5,7 @@ import path from 'path';
 import User from '@eximchain/dappbot-types/spec/user';
 import { MethodAbi } from 'ethereum-types';
 import { ArgShape, DEFAULT_DATA_PATH, AdditionalArgs, UniversalArgs } from "../cli";
+import groupBy from 'lodash.groupby';
 
 
 export const fastRender:typeof render = (tree) => {
@@ -206,6 +207,8 @@ export const ChainIdentities:ChainIdentity[] = [
     displayName : 'Ethereum (Goerli)'
   }
 ]
+
+export const ChainsById = groupBy(ChainIdentities, identity => identity.chainId);
 
 /**
  * These interfaces do not represent a full Truffle artifact,
