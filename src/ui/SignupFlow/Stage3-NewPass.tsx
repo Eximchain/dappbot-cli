@@ -27,14 +27,16 @@ export const StageNewPass: FC<StageNewPassProps> = ({ API, email, session, setPa
 
   if (newPass === '') return (
     <ArgPrompt hideVal
-      name='New Password (Minimum 8 characters including upcase, locase, number, &amp; symbol)'
+      label="Please create a new password which has at least 8 characters, including upcase, locase, a number, &amp; a symbol."
+      name='New Password'
       key='newPassPrompt'
       withResult={setNewPass} />
   )
 
   if (confirmPass === '') return (
     <ArgPrompt hideVal
-      name='Confirm New Password (must match previous value)'
+      label="Please confirm your new password; this must match the previous value."
+      name='New Password'
       key='confirmPassPrompt' 
       withResult={(confirmInput)=>{
         if (confirmInput === newPass) {
@@ -46,6 +48,7 @@ export const StageNewPass: FC<StageNewPassProps> = ({ API, email, session, setPa
           })
         } else {
           // How do I signal an error?
+          setNewPass('');
         }
       }}/>
   )

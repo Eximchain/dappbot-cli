@@ -30,7 +30,8 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
 
   if (authPath === '') {
     return (
-      <ArgPrompt name='Where should we put your auth file?'
+      <ArgPrompt name='Path for authData'
+        label="Which file would you like to keep your authData in?  If you put it in the default location, DappBot will automatically read it without having to provide an option."
         defaultValue={DEFAULT_DATA_PATH}
         withResult={(val) => {
           setAuthPath(path.normalize(val)) 

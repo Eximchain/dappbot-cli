@@ -8,10 +8,10 @@ export interface ItemListProps {
 
 export const ItemList: FC<ItemListProps> = ({ items }) => {
   return (
-    <Box margin={1}>
+    <Box margin={1} flexDirection='column'>
       {
-        Object.keys(items).map(itemName => (
-          <TextBox><Text bold>{itemName}{': '}</Text>{items[itemName]}</TextBox>
+        Object.keys(items).map((itemName, i) => (
+          <TextBox key={i}><Text bold>{itemName}{': '}</Text>{items[itemName]}</TextBox>
         ))
       }
     </Box>

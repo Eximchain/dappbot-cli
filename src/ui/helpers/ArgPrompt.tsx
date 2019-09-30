@@ -1,7 +1,7 @@
 import React, { FC, useState, ReactElement, PropsWithChildren } from 'react';
 import { Box } from 'ink';
 import TextInput, { InkTextInputProps } from 'ink-text-input';
-import { BoxPads } from '.';
+import { BoxPads, LabeledContent } from '.';
 
 
 export type ArgPromptProps = {
@@ -9,7 +9,7 @@ export type ArgPromptProps = {
   withResult:(val:string) => void
   
   defaultValue?: string
-  description?: string
+  label?: string|string[]
   hideVal?: boolean
 
   /**
@@ -35,11 +35,16 @@ export const ArgPrompt:FC<ArgPromptProps> = (props) => {
   inputProps.onSubmit = !props.isValid ? withResult : (val:string) => {
 
   }
-  return (
-    <BoxPads>
+  let body = (
+    <>
       <Box marginRight={1}>{ basePrompt }</Box>
       <TextInput {...inputProps} />
-    </BoxPads>
+    </>
+  );
+  return props.label ? (
+    <LabeledContent label={props.label} content={body} />
+  ) : (
+    <BoxPads>{body}</BoxPads>
   )
 }
 

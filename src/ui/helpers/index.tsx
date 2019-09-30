@@ -2,14 +2,8 @@ import { HttpMethods } from '@eximchain/dappbot-types/spec/responses';
 import { RequestError } from 'react-request-hook';
 import { ChainIdentity } from '../../services/util';
 
-export * from './BoxPads';
-export * from './ArgPrompt';
-export * from '../PrettyRequest';
-export * from './TextBox';
-export * from './Loader';
-export * from './ErrorBox';
-export * from './SuccessBox';
-export * from './ItemList';
+export const LIGHT_BLUE = '#78B4F2';
+export const EXIM_BLUE = '';
 
 export function ApiMethodLabel(method:HttpMethods.ANY, path:string) {
   return `${method} ${path}`
@@ -18,7 +12,7 @@ export function ApiMethodLabel(method:HttpMethods.ANY, path:string) {
 export function errMsgFromResource(error:RequestError):string {
   let errMsg;
   try {
-    errMsg = `${error.code}: ${error.data.err.message}`;
+    errMsg = `${error.data.err.message} (HTTP ${error.code})`;
   } catch (err) {
     errMsg = '\n\n'+JSON.stringify(error.data, null, 2);
   }
@@ -40,3 +34,16 @@ export function ChainOption(chainId:number, chain?:ChainIdentity) {
     label: ChainName(chainId), value: chainId
   })
 }
+
+export * from './BoxPads';
+export * from './ArgPrompt';
+export * from '../PrettyRequest';
+export * from './TextBox';
+export * from './Loader';
+export * from './ErrorLabel';
+export * from './ErrorBox';
+export * from './SuccessLabel';
+export * from './SuccessBox';
+export * from './ItemList';
+export * from './Select';
+export * from './LabeledContent';

@@ -223,7 +223,6 @@ export interface TruffleArtifact {
 export interface NetworkMap {
   [key:string] : {
     address: string
-    updatedAt: number
   }
 }
 
@@ -242,14 +241,14 @@ export function isTruffleArtifact(val:any): val is TruffleArtifact {
 }
 
 export function isNetworkMap(val:any): val is NetworkMap {
+  if (!isObject(val)) return false;
+  if (Object.keys(val).length === 0) return true;
   return (
-    isObject(val) &&
     Object.keys(val).every(val => parseInt(val) !== NaN) &&
     Object.values(val).every((networkVal:any) => {
       return (
         isObject(networkVal) &&
-        typeof networkVal.address === 'string' &&
-        typeof networkVal.updatedAt === 'number'
+        typeof networkVal.address === 'string'
       )
     })
   )

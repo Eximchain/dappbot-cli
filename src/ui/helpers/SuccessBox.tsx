@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Box, Text, Static, Color } from 'ink';
-import { BoxPads } from '.';
+import { BoxPads, SuccessLabel } from '.';
 import { isMessageResult } from '@eximchain/dappbot-types/spec/responses';
 
 export interface SuccessBoxProps {
@@ -19,9 +19,7 @@ export const SuccessBox: FC<SuccessBoxProps> = ({ result, permanent, operation }
   let body = (
     <Box marginTop={1}>
     <BoxPads key='errorBox'>
-      <Color bgHex='#208E00' white>
-        <Text bold>{' SUCCESS '}</Text>
-      </Color>
+      <SuccessLabel />
       {' '}
       {content}
     </BoxPads>

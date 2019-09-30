@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import DappbotAPI from '@eximchain/dappbot-api-client';
-import SelectInput from 'ink-select-input';
-import { Loader, ApiMethodLabel, PrettyRequest, TextBox, ItemList, ChainName } from '../helpers';
+import { Select, ApiMethodLabel, PrettyRequest, TextBox, ItemList, ChainName } from '../helpers';
 import { TruffleArtifact, ChainsById } from '../../services/util';
 import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
 import { UpdateDapp, CreateDapp } from '@eximchain/dappbot-types/spec/methods/private';
@@ -14,10 +13,11 @@ export interface StageConfirmDapp {
   DappName: string
   Web3URL: string
   ContractAddr: string
+  startOver: () => void
 }
 
 export const StageConfirmDapp: FC<StageConfirmDapp> = (props) => {
-  const { DappName, Web3URL, ContractAddr, API, isUpdate, artifact } = props;
+  const { DappName, Web3URL, ContractAddr, API, isUpdate, artifact, startOver } = props;
   const [confirmed, setConfirmed] = useState(false);
 
   // Determine the name of the user's chosen network.
@@ -54,26 +54,30 @@ export const StageConfirmDapp: FC<StageConfirmDapp> = (props) => {
 
   if (!confirmed) {
     return (
-      <Box>
-        <TextBox>Before we create your dapp, let's make sure it's exactly what you want.</TextBox>
-        <ItemList items={{
-          'Dapp Name': DappName,
-          'Contract': `${artifact.contract_name} (${AbiFxns.length} functions, including ${AbiFxns[0]} & ${AbiFxns[1]})`,
-          'Network': networkName,
-          'Deployed Address': ContractAddr,
-        }} />
-        <SelectInput 
-          items={[
-            { label: "Yes, make this dapp!", value: 'continue' },
-            { label: "Let me start over", value: 'cancel' }
-          ]} 
-          onSelect={item => {
-            if (item.value === 'continue') {
-              setConfirmed(true);
-            } else {
-              process.exit(1);
-            }
+      <Box flexDirection='column' margin={1}>
+        <TextBox>Before we make your dapp, let's make sure it's exactly what you want.</TextBox>
+        <Box flexDirection='row' marginX={1}>
+          <ItemList items={{
+            'Dapp Name': DappName,
+            'Contract': `${artifact.contract_name} (${AbiFxns.length} functions, including ${AbiFxns[0]} & ${AbiFxns[1]})`,
+            'Network': networkName,
+            'Deployed Address': ContractAddr,
           }} />
+        </Box>
+        <Box flexDirection='row'>
+          <Select
+            items={[
+              { label: "Yes, make this dapp!", value: 'continue' },
+              { label: "Let me start over", value: 'cancel' }
+            ]}
+            onSelect={item => {
+              if (item.value === 'continue') {
+                setConfirmed(true);
+              } else {
+                startOver()
+              }
+            }} />
+        </Box>
       </Box>
     )
   }

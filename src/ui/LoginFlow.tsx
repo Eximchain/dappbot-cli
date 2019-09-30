@@ -1,14 +1,12 @@
 import React, { FC, useState, useEffect } from 'react';
 import path from 'path';
 import fs from 'fs';
-import Spinner from 'ink-spinner';
 import { useResource } from 'react-request-hook';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
-import { BoxPads, TextBox, Loader, ErrorBox, errMsgFromResource } from './helpers';
-import { Box, Text, Static } from 'ink';
+import { Loader, errMsgFromResource, SuccessBox, ErrorBox } from './helpers';
 import { DEFAULT_DATA_PATH } from '../cli';
 
 export interface LoginFlowProps {
@@ -21,9 +19,9 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
   const [dataPath, setDataPath] = useState(DEFAULT_DATA_PATH);
   const [loginResult, requestLogin] = useResource(API.auth.login.resource);
   const { data, isLoading, error } = loginResult;
-  
 
-  useEffect(function handleLoginResponse(){
+
+  useEffect(function handleLoginResponse() {
     if (
       Responses.isSuccessResponse(data) &&
       User.isAuthData(data.data)
@@ -36,20 +34,23 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
 
   if (username === '') {
     return (
-      <ArgPrompt name='email' 
+      <ArgPrompt name='email'
         key='emailPrompt'
-        withResult={setUsername}/>
+        label="Please enter your login credentials."
+        withResult={setUsername} />
     )
   } else if (password === '') {
     return (
       <ArgPrompt name='password' hideVal
+        label="Please enter your login credentials."
         key='passwordPrompt'
-        withResult={setPassword}/>
+        withResult={setPassword} />
     )
   } else if (!isLoading && !data && !error) {
     return (
-      <ArgPrompt name='Path for auth data' 
+      <ArgPrompt name='Path for auth data'
         defaultValue={DEFAULT_DATA_PATH}
+        label="Where would you like to keep your authData in?  If you put it in the default location, DappBot will automatically read it without having to provide an option."
         withResult={(val) => {
           setDataPath(val);
           requestLogin({ username, password })
@@ -65,18 +66,12 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
     )
   } else {
     let followonMsg = dataPath === DEFAULT_DATA_PATH ?
-    '\n\nYou chose the default --authPath location, so it will be automatically inferred for private commands.' :
-    '\n\nPlease include this path (can be relative) on the --authPath option, that way we can infer the Authorization for private requests.'
+      `Your auth data will be automatically inferred from ${dataPath} for private commands.` :
+      `Please include the authPath option (e.g. $ dappbot --authPath ${dataPath} ...) for private commands.`
     return (
-      <Static>
-        <BoxPads>
-          <TextBox>Your login was successful!</TextBox>
-        </BoxPads>
-        <TextBox>
-          You can find your saved authentication data at {path.resolve(process.cwd(), dataPath)}.
-          { followonMsg }
-        </TextBox>
-      </Static>
+      <SuccessBox permanent result={{
+        message: `You are now logged in! ${followonMsg}`
+      }} />
     )
   }
 }
