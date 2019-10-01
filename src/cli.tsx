@@ -17,6 +17,7 @@ export interface UniversalArgs {
 	AbiFile?: string
 	apiUrl: string
 	hubUrl: string
+	mngrUrl: string
 }
 
 export interface AdditionalArgs {
@@ -33,24 +34,33 @@ yargs
 			description: 'The path to a file with saved DappBot auth data.'
 		},
 		apiUrl: {
-			description: 'Your DappBot API endpoint.',
-			default: 'https://cli-api.eximchain-dev.com'
+			description: "The URL for DappBot's API.",
+			default: 'https://cli-api.eximchain-dev.com',
+			group: 'URL Options:'
+		},
+		mngrUrl: {
+			description: "The URL for DappBot's management app",
+			default: 'https://cli-mngr.eximchain-dev.com',
+			group: 'URL Options:'
 		},
 		hubUrl: {
 			description: 'The URL for DappHub.',
-			default: 'https://cli-hub.eximchain-dev.com'
+			default: 'https://cli-hub.eximchain-dev.com',
+			group: 'URL Options:'
 		}
 	})
 	.middleware(addDefaultAuthIfPresent)
 	.middleware(loadFileFromPath)
 	.commandDir('rootCmds')
-	.usage('Usage: dappbot <command> [args]')
+	.usage('Usage: dappbot <command>')
 	.demandCommand(2)
 	.wrap(Math.min(yargs.terminalWidth(), 160))
 	.help('help')
 	.alias('help', 'h')
 	.version(npmPackage.version)
 	.alias('version', 'v')
-	.epilog('© Eximchain Pte. Ltd.')
+	.hide('help')
+	.hide('version')
+	.epilog('Made by Eximchain Pte. Ltd.')
 	.argv
 	

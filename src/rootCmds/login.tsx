@@ -6,7 +6,7 @@ import { App, LoginFlow } from '../ui';
 
 export const command = 'login';
 
-export const desc = 'Interactive command to begin a persistent session with DappBot.';
+export const desc = 'Begin a persistent session with DappBot.';
 
 export const builder = {}
 

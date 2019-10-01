@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Box, Text, Static, Color } from 'ink';
-import { BoxPads } from '.';
+import { BoxPads, ErrorLabel } from '.';
 
 export interface ErrorBoxProps {
   errMsg: string
@@ -12,21 +12,20 @@ export const ErrorBox: FC<ErrorBoxProps> = ({ errMsg: message, permanent, operat
   let body = (
     <Box marginTop={1}>
     <BoxPads key='errorBox'>
-      <Color bgHex='#AF3609' white>
-        <Text bold>{' ERROR '}</Text>
-      </Color>
+      <ErrorLabel />
       {' '}
       { operation ? `${operation} ` : ''}
       {message}
     </BoxPads>
     </Box>
   )
-  return permanent ? (
+  if (permanent !== true) return body;
+  return (
     <Static>
       { body }
       <></>
     </Static>
-  ) : body ;
+  )
 }
 
 export default ErrorBox;

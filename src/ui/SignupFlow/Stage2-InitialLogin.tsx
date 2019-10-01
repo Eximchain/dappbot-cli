@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { useResource } from 'react-request-hook';
-import { ArgPrompt, ErrorBox, Loader } from '../helpers';
+import { ArgPrompt, ErrorBox, Loader, Rows, ChevronText } from '../helpers';
 import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { Challenges } from '@eximchain/dappbot-types/spec/user';
 
@@ -24,7 +24,8 @@ export const StageInitialLogin: FC<StageInitialLoginProps> = ({ API, email, setS
   }, [data, isLoading, error])
 
   if (tempPass === '') return (
-    <ArgPrompt name='Temporary Password (check your email!)'
+    <ArgPrompt name='Temporary Password'
+      label={<ChevronText>We just sent a temporary password to {email}!  Please check your inbox and enter it now.</ChevronText>}
       withResult={(passFromEmail) => {
         setTempPass(passFromEmail);
         requestLogin({
@@ -32,7 +33,6 @@ export const StageInitialLogin: FC<StageInitialLoginProps> = ({ API, email, setS
           password: passFromEmail
         })
       }} />
-
   )
 
   return error ? (

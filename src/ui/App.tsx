@@ -1,12 +1,11 @@
 import React, { useState, PropsWithChildren, ReactElement, useEffect } from 'react';
 import path from 'path';
 import fs from 'fs';
-import { Text } from 'ink';
 import DappbotAPI from '@eximchain/dappbot-api-client';
-import User, { isAuthData, newAuthData, AuthData } from '@eximchain/dappbot-types/spec/user';
+import { newAuthData, AuthData } from '@eximchain/dappbot-types/spec/user';
 import { ArgShape, AdditionalArgs } from '../cli';
-import { ErrorBox, Loader, BoxPads } from './helpers';
-import { RequestProvider, useResource } from 'react-request-hook';
+import { Loader } from './helpers';
+import { RequestProvider } from 'react-request-hook';
 import axios from 'axios';
 
 export type RenderFuncProps<Additional extends AdditionalArgs = AdditionalArgs> = (props: {
@@ -27,7 +26,7 @@ function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<A
   const [authData, setAuthData] = useState(initialAuth);
 
   const API = new DappbotAPI({
-    authData, 
+    authData,
     setAuthData: (auth) => {
       if (args.authPath) {
         fs.writeFileSync(path.resolve(process.cwd(), args.authPath), JSON.stringify(auth, null, 2));
@@ -37,17 +36,17 @@ function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<A
     dappbotUrl: 'https://cli-api.eximchain-dev.com'
   })
 
-  useEffect(function refreshIfStale(){
+  useEffect(function refreshIfStale() {
     if (API.hasStaleAuth()) API.refreshAuth()
   }, [API, authData])
 
   return API.hasStaleAuth() ? (
     <Loader message='Refreshing your authData...' />
   ) : (
-    renderFunc({
-      API, authData, setAuthData, args
-    })
-  )
+      renderFunc({
+        API, authData, setAuthData, args
+      })
+    )
 }
 
 export function App<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {

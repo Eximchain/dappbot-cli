@@ -9,7 +9,7 @@ import { Argv } from 'yargs';
 
 export const command = 'truffle';
 
-export const desc = "Interactive command: run in a Truffle project directory to make a dapp from one of your contracts' build artifacts.";
+export const desc = "Run in a Truffle project directory to make a dapp for one of your deployed contracts.";
 
 export function builder(yargs: Argv<UniversalArgs>) {
   yargs.middleware(requireAuthData);
@@ -33,9 +33,14 @@ export function handler(args:ArgShape) {
   // Fetch all the files in there
   const artifactDir = path.resolve(thisDir, './build/contracts');
   const artifactFilenames = shell.ls(artifactDir).filter(name => name.endsWith('.json'));
-  const artifacts:TruffleArtifact[] = artifactFilenames.map(filename => {
-    return JSON.parse(fs.readFileSync(path.resolve(artifactDir, filename)).toString())
-  }).filter(artifact => isTruffleArtifact(artifact))
+  // console.log('Found artifact filenames: ',artifactFilenames);
+  const unfilteredArtifacts:TruffleArtifact[] = artifactFilenames.map(filename => {
+    const artifact = JSON.parse(fs.readFileSync(path.resolve(artifactDir, filename)).toString())
+    if (artifact.contractName) artifact.contract_name = artifact.contractName;
+    return artifact;
+  })
+
+  const artifacts = unfilteredArtifacts.filter(artifact => isTruffleArtifact(artifact) && artifact.contract_name !== 'Migrations')
 
   if (artifacts.length === 0) {
     return fastRender(
@@ -54,6 +59,10 @@ export function handler(args:ArgShape) {
       <ErrorBox errMsg={`We found ${artifacts.length} built contracts, but none of them have been deployed to a network!  Make sure you have properly deployed your contract before trying to create a a Dapp for it.`} />
     )
   }
+
+  // artifacts.forEach(artifact => console.log(Object.keys(artifact.networks)))
+  // console.log('now with parseInt')
+  // artifacts.forEach(artifact => console.log(Object.keys(artifact.networks).map(parseInt)))
 
   // Got deployable artifacts, good to go!
   fastRender(
