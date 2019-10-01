@@ -33,7 +33,7 @@ function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<A
       }
       setAuthData(auth);
     },
-    dappbotUrl: 'https://cli-api.eximchain-dev.com'
+    dappbotUrl: args.apiUrl
   })
 
   useEffect(function refreshIfStale() {
