@@ -1,4 +1,5 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, ReactElement } from 'react';
+import { TextProps } from 'ink';
 import { XOR } from 'ts-xor';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 
@@ -9,12 +10,15 @@ import SelectArtifact from './Stage2-SelectArtifact';
 import SelectNetwork from './Stage3-SelectNetwork';
 import SetDappName from './Stage4-SetDappName';
 import ConfirmDapp from './Stage5-ConfirmDapp';
+import PerformRequest from './Stage6-PerformRequest';
 
 export interface TruffleFlowProps {
   API: DappbotAPI
   artifacts: TruffleArtifact[]
   authFile: string
 }
+
+export type StringElt = string | ReturnType<FC<TextProps>>;
 
 export const TruffleFlow:FC<TruffleFlowProps> = (props) => {
   const { API, artifacts, authFile } = props;
@@ -24,8 +28,11 @@ export const TruffleFlow:FC<TruffleFlowProps> = (props) => {
   const [ContractAddr, setContractAddr] = useState('');
   const [DappName, setDappName] = useState('');
 
-  const [progressMsgs, setProgressMsgs] = useState([] as string[]);
-  function addProgressMsg(msg:string) {
+  const [dappConfirmed, setDappConfirmed] = useState(false);
+  function confirmDapp(){ setDappConfirmed(true) }
+
+  const [progressMsgs, setProgressMsgs] = useState([] as StringElt[]);
+  function addProgressMsg(msg:StringElt) {
     setProgressMsgs(msgs => msgs.concat([msg]))
   }
 
@@ -46,16 +53,24 @@ export const TruffleFlow:FC<TruffleFlowProps> = (props) => {
     <SelectArtifact {...{ setArtifact, artifacts, addProgressMsg, progressMsgs }} />
   )
 
+  if (DappName === '') return (
+    <SetDappName {...{ API, setDappName, artifact, addProgressMsg, progressMsgs }} />
+  )
+
   if (Web3URL === '' || ContractAddr === '') return (
     <SelectNetwork {...{ artifact, setWeb3URL, setContractAddr, addProgressMsg, progressMsgs }} />
   )
 
-  if (DappName === '') return (
-    <SetDappName {...{ API, setDappName, artifact, progressMsgs }} />
+  if (!dappConfirmed) return (
+    <ConfirmDapp {...{ 
+      isUpdate, artifact, Web3URL, DappName, ContractAddr, startOver, confirmDapp
+     }} />
   )
 
   return (
-    <ConfirmDapp {...{ API, isUpdate, artifact, Web3URL, DappName, ContractAddr, startOver }} />
+    <PerformRequest {...{
+      API, isUpdate, artifact, Web3URL, DappName, ContractAddr
+    }} />
   )
 }
 

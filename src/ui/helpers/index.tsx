@@ -36,6 +36,7 @@ export function ChainOption(chainId:number, chain?:ChainIdentity) {
 }
 
 export * from './BoxPads';
+export * from './ChevronText';
 export * from './ArgPrompt';
 export * from '../PrettyRequest';
 export * from './TextBox';
@@ -46,4 +47,4 @@ export * from './SuccessLabel';
 export * from './SuccessBox';
 export * from './ItemList';
 export * from './Select';
-export * from './LabeledContent';
+export * from './Rows';

@@ -2,7 +2,8 @@ import React, { FC } from 'react';
 import { Color, Text, Box } from 'ink';
 import SelectInput, { InkSelectInputProps, ItemProps, IndicatorProps } from 'ink-select-input';
 import figures from 'figures';
-import { LIGHT_BLUE, LabeledContent } from '.';
+import { LIGHT_BLUE, Rows } from '.';
+import { StringElt } from '../TruffleFlow';
 
 
 const LightBlue:FC = ({ children }) => <Color hex={LIGHT_BLUE}>{ children }</Color>
@@ -30,7 +31,7 @@ function Indicator(props:IndicatorProps) {
 }
 
 export interface SelectProps extends InkSelectInputProps {
-  label?: string|string[]
+  label?: StringElt | StringElt[]
 }
 
 export const Select:FC<SelectProps> = (props) => {
@@ -40,8 +41,12 @@ export const Select:FC<SelectProps> = (props) => {
       itemComponent={Item} />
   )
   if (!props.label) return body;
+
   return (
-    <LabeledContent label={props.label} content={body} />
+    <Rows>
+      { props.label }
+      { body }
+    </Rows>
   )
 }
 

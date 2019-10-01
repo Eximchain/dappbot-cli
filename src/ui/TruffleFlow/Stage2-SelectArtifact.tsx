@@ -1,12 +1,14 @@
 import React, { FC, useEffect } from 'react';
+import { Text } from 'ink';
 import { TruffleArtifact } from '../../services/util';
-import { LabeledContent, Select } from '../helpers';
+import { Rows, Select, ChevronText } from '../helpers';
+import { StringElt } from '.';
 
 export interface StageSelectArtifactProps {
   artifacts: TruffleArtifact[]
   setArtifact: (contract: TruffleArtifact) => void
-  progressMsgs: string[]
-  addProgressMsg: (msg:string)=>void
+  progressMsgs: StringElt[]
+  addProgressMsg: (msg:StringElt)=>void
 }
 
 export const StageSelectArtifact: FC<StageSelectArtifactProps> = (props) => {
@@ -15,13 +17,20 @@ export const StageSelectArtifact: FC<StageSelectArtifactProps> = (props) => {
   useEffect(function autoSelectLoneArtifact(){
     if (artifacts.length === 1) {
       setArtifact(artifacts[0])
-      addProgressMsg(`Automatically using the ${artifacts[0].contract_name} contract; it it the only one which has been deployed.`)
+      addProgressMsg(
+        <ChevronText key='auto-select-artifact'>
+          Automatically using the <Text underline>{artifacts[0].contract_name}</Text> contract; it is the only one which has been deployed.
+        </ChevronText>
+      )
     }
   }, [artifacts])
 
   return (
     <Select
-      label={progressMsgs.concat(["Which contract would you like to make a dapp for?"])}
+      key='select-artifact'
+      label={progressMsgs.concat([
+        <ChevronText key='artifact-select-label'>Which contract would you like to make a dapp for?</ChevronText>
+      ])}
       items={artifacts.map(artifact => ({
         label: artifact.contract_name,
         value: artifact.contract_name
@@ -30,7 +39,11 @@ export const StageSelectArtifact: FC<StageSelectArtifactProps> = (props) => {
         let selection = artifacts.find(artifact => artifact.contract_name === item.value);
         if (selection) {
           setArtifact(selection)
-          addProgressMsg(`Using the ${selection.contract_name} contract.`)
+          addProgressMsg(
+            <ChevronText key='selected-artifact'>
+              Using the <Text underline>{selection.contract_name}</Text> contract.
+            </ChevronText>
+          )
         };
       }} />
   )

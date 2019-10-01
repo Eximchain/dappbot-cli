@@ -1,15 +1,21 @@
-import { Argv } from 'yargs';
 import { DappNameArg, ArgShape } from '../cli';
 import open from 'open';
+import { fastRender } from '../services/util';
+import React from 'react';
+import { SuccessBox } from '../ui';
 
 export const command = 'billing';
 
 export const desc = "Visit DappBot's billing page to update your payment info or dapp capacity.";
 
-export function builder(yargs:Argv) {
-
-}
+export const builder = {}
 
 export function handler(args:ArgShape<DappNameArg>) {
-  open(`${args.mngrUrl}/home/user-settings`)
+  const url = `${args.mngrUrl}/home/user-settings`;
+  fastRender(
+    <SuccessBox result={{
+      message: `Opening ${url} now!`
+    }} />
+  )
+  open(url)
 }

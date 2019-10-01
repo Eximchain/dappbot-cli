@@ -1,24 +1,20 @@
-import React, { FC, useState, useEffect } from 'react';
-import DappbotAPI from '@eximchain/dappbot-api-client';
-import { Select, ApiMethodLabel, PrettyRequest, TextBox, ItemList, ChainName } from '../helpers';
+import React, { FC } from 'react';
+import { Select, ChevronText, ItemList, ChainName } from '../helpers';
 import { TruffleArtifact, ChainsById } from '../../services/util';
-import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
-import { UpdateDapp, CreateDapp } from '@eximchain/dappbot-types/spec/methods/private';
 import { Box } from 'ink';
 
 export interface StageConfirmDapp {
-  API: DappbotAPI
   isUpdate: boolean
   artifact: TruffleArtifact
   DappName: string
   Web3URL: string
   ContractAddr: string
   startOver: () => void
+  confirmDapp: () => void
 }
 
 export const StageConfirmDapp: FC<StageConfirmDapp> = (props) => {
-  const { DappName, Web3URL, ContractAddr, API, isUpdate, artifact, startOver } = props;
-  const [confirmed, setConfirmed] = useState(false);
+  const { DappName, Web3URL, ContractAddr, isUpdate, artifact, startOver, confirmDapp } = props;
 
   // Determine the name of the user's chosen network.
   // First find the chosen network artifact by checking to see
@@ -52,49 +48,32 @@ export const StageConfirmDapp: FC<StageConfirmDapp> = (props) => {
     return nameB.length - nameA.length
   });
 
-  if (!confirmed) {
-    return (
-      <Box flexDirection='column' margin={1}>
-        <TextBox>Before we make your dapp, let's make sure it's exactly what you want.</TextBox>
-        <Box flexDirection='row' marginX={1}>
-          <ItemList items={{
-            'Dapp Name': DappName,
-            'Contract': `${artifact.contract_name} (${AbiFxns.length} functions, including ${AbiFxns[0]} & ${AbiFxns[1]})`,
-            'Network': networkName,
-            'Deployed Address': ContractAddr,
-          }} />
-        </Box>
-        <Box flexDirection='row'>
-          <Select
-            items={[
-              { label: "Yes, make this dapp!", value: 'continue' },
-              { label: "Let me start over", value: 'cancel' }
-            ]}
-            onSelect={item => {
-              if (item.value === 'continue') {
-                setConfirmed(true);
-              } else {
-                startOver()
-              }
-            }} />
-        </Box>
-      </Box>
-    )
-  }
-
-  const Abi = JSON.stringify(artifact.abi);
-  const req = isUpdate ?
-    () => API.private.updateDapp.resource(DappName, { Web3URL, ContractAddr, Abi }) :
-    () => API.private.createDapp.resource(DappName, {
-      Web3URL, ContractAddr, Abi,
-      GuardianURL: 'https://example.com',
-      Tier: Tiers.Standard
-    })
-  const operation = isUpdate ?
-    ApiMethodLabel(UpdateDapp.HTTP, UpdateDapp.Path(DappName)) :
-    ApiMethodLabel(CreateDapp.HTTP, CreateDapp.Path(DappName))
   return (
-    <PrettyRequest {...{ req, operation }} />
+    <Box flexDirection='column' margin={1}>
+      <ChevronText>Before we { isUpdate ? 'update' : 'create'} your dapp, let's make sure it's exactly what you want.</ChevronText>
+      <Box flexDirection='row' marginX={1}>
+        <ItemList items={{
+          'Dapp Name': DappName,
+          'Contract': `${artifact.contract_name} (${AbiFxns.length} functions, including ${AbiFxns[0]} & ${AbiFxns[1]})`,
+          'Network': networkName,
+          'Deployed Address': ContractAddr,
+        }} />
+      </Box>
+      <Box flexDirection='row'>
+        <Select
+          items={[
+            { label: "Yes, make this dapp!", value: 'continue' },
+            { label: "Let me start over", value: 'cancel' }
+          ]}
+          onSelect={item => {
+            if (item.value === 'continue') {
+              confirmDapp();
+            } else {
+              startOver();
+            }
+          }} />
+      </Box>
+    </Box>
   )
 
 }

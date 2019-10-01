@@ -6,7 +6,7 @@ import DappbotAPI from '@eximchain/dappbot-api-client';
 import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
-import { Loader, errMsgFromResource, SuccessBox, ErrorBox } from './helpers';
+import { Loader, errMsgFromResource, SuccessBox, ErrorBox, ChevronText } from './helpers';
 import { DEFAULT_DATA_PATH } from '../cli';
 
 export interface LoginFlowProps {
@@ -32,17 +32,18 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
     }
   }, [data, dataPath])
 
+  let credentialsLabel = <ChevronText>Please enter your login credentials.</ChevronText>;
   if (username === '') {
     return (
       <ArgPrompt name='email'
         key='emailPrompt'
-        label="Please enter your login credentials."
+        label={credentialsLabel}
         withResult={setUsername} />
     )
   } else if (password === '') {
     return (
       <ArgPrompt name='password' hideVal
-        label="Please enter your login credentials."
+        label={credentialsLabel}
         key='passwordPrompt'
         withResult={setPassword} />
     )
@@ -50,7 +51,9 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
     return (
       <ArgPrompt name='Path for auth data'
         defaultValue={DEFAULT_DATA_PATH}
-        label="Where would you like to keep your authData in?  If you put it in the default location, DappBot will automatically read it without having to provide an option."
+        label={
+          <ChevronText>Where would you like to keep your authData file?  If you put it in the default location, DappBot will automatically read it without having to provide an option.</ChevronText>
+        }
         withResult={(val) => {
           setDataPath(val);
           requestLogin({ username, password })

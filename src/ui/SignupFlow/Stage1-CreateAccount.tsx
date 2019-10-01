@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { useResource } from 'react-request-hook';
-import { ArgPrompt, ErrorBox, Loader, LabeledContent } from '../helpers';
+import { ArgPrompt, ErrorBox, Loader, ChevronText } from '../helpers';
 import { Payment } from '@eximchain/dappbot-types/spec/methods';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 
@@ -27,14 +27,14 @@ export const CreateAccount: FC<CreateAccountProps> = ({ API, setEmail }) => {
 
   if (email === '') return (
     <ArgPrompt name='Email'
-      label="What email would you like to use?  This will be your username."
+      label={<ChevronText>What email would you like to use?  This will be your username.</ChevronText>}
       withResult={setEmailState}
       key='emailPrompt' />
   )
 
   if (name === '') return (
     <ArgPrompt name='Name'
-      label="What is your name?"
+      label={<ChevronText>What is your name?</ChevronText>}
       withResult={(nameVal) => {
         setName(nameVal);
         requestSignup({

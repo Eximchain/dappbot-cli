@@ -9,7 +9,7 @@ import { Argv } from 'yargs';
 
 export const command = 'truffle';
 
-export const desc = "Interactive command: run in a Truffle project directory to make a dapp from one of your contracts' build artifacts.";
+export const desc = "Run in a Truffle project directory to make a dapp for one of your deployed contracts.";
 
 export function builder(yargs: Argv<UniversalArgs>) {
   yargs.middleware(requireAuthData);

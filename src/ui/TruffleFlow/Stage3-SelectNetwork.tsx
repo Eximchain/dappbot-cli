@@ -1,15 +1,17 @@
 import React, { FC, useState } from 'react';
+import { Text } from 'ink';
 import flatten from 'lodash.flatten';
-import { ArgPrompt, ChainOption, LabeledContent, Select } from '../helpers';
+import { ArgPrompt, ChainOption, ChevronText, Select } from '../helpers';
 import { TruffleArtifact, ChainIdentities, ChainsById } from '../../services/util';
 import { XOR } from 'ts-xor';
+import { StringElt } from '.';
 
 export interface StageSelectNetworkProps {
   artifact: TruffleArtifact
   setWeb3URL: (url: string) => void;
   setContractAddr: (addr: string) => void;
-  progressMsgs: string[]
-  addProgressMsg: (msg:string)=>void
+  progressMsgs: StringElt[]
+  addProgressMsg: (msg:StringElt)=>void
 }
 
 export const StageSelectNetwork: FC<StageSelectNetworkProps> = (props) => {
@@ -40,7 +42,10 @@ export const StageSelectNetwork: FC<StageSelectNetworkProps> = (props) => {
 
   if (needCustomWeb3 === null) return (
     <Select
-      label={progressMsgs.concat(["Which of your contract's networks would you like the dapp to communicate with?"])}
+      key='select-network'
+      label={progressMsgs.concat([
+        <ChevronText key='select-network-label'>Which of {artifact.contract_name}'s networks would you like the dapp to communicate with?</ChevronText>
+      ])}
       items={flatten(networkOptions)}
       onSelect={item => {
         if (typeof item.value === 'number') {
@@ -55,15 +60,26 @@ export const StageSelectNetwork: FC<StageSelectNetworkProps> = (props) => {
           setNeedCustomWeb3(false);
           setContractAddr(networkItem.address);
           setWeb3URL(chosenNetwork.web3Url);
+          addProgressMsg(
+            <ChevronText key='chosen-network'>The Dapp will communicate with <Text underline>{chosenNetwork.displayName}</Text>.</ChevronText>
+          )
         }
       }} />
   )
 
   if (needCustomWeb3) return (
     <ArgPrompt
+      key='enter-url'
       name="Web3URL"
-      label={progressMsgs.concat(["We don't have an RPC URL on hand to communicate with this network.  Please provide a full Web3 HTTPProvider URL, including the https://."])}
-      withResult={setWeb3URL} />
+      label={progressMsgs.concat([
+        <ChevronText key='custom-rpc'>We don't have an RPC URL on hand to communicate with this network.  Please provide a full Web3 HTTPProvider URL, including the https://.</ChevronText>
+      ])}
+      withResult={(newUrl) => {
+        setWeb3URL(newUrl);
+        addProgressMsg(
+          <ChevronText key='custom-web3'>The Dapp will communicate with a custom network through <Text underline>{newUrl}</Text>.</ChevronText>
+        )
+      }} />
   )
 
   return null;

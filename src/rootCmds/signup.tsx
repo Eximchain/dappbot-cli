@@ -5,7 +5,7 @@ import { App, SignupFlow } from '../ui';
 
 export const command = 'signup'
 
-export const desc = 'Interactive command to create a new account with DappBot.';
+export const desc = 'Create a new account with DappBot.';
 
 export const builder = {};
 

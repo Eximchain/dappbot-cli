@@ -18,7 +18,7 @@ export const SuccessBox: FC<SuccessBoxProps> = ({ result, permanent, operation }
   }
   let body = (
     <Box marginTop={1}>
-    <BoxPads key='errorBox'>
+    <BoxPads key='successBox'>
       <SuccessLabel />
       {' '}
       {content}

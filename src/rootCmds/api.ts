@@ -4,7 +4,7 @@ import { ArgShape } from "../cli";
 
 export const command = 'api <resource/method> [args]';
 
-export const desc = 'Directly access all of DappBot API methods, organized by their endpoints.';
+export const desc = 'Access all of DappBot API methods, organized by their endpoints.';
 
 export function builder(yargs:Argv) {
   return yargs

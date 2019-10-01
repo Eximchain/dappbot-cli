@@ -1,4 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
+import { Static, Text } from 'ink';
+import { SuccessBox, Rows, ChevronText, SuccessLabel } from '../helpers';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 
 import CreateAccount from './Stage1-CreateAccount';

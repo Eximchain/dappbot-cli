@@ -1,10 +1,13 @@
 import { Argv } from 'yargs';
 import { DappNameArg, ArgShape } from '../cli';
 import open from 'open';
+import { fastRender } from '../services/util';
+import React from 'react';
+import { SuccessBox } from '../ui';
 
 export const command = 'goto <DappName>';
 
-export const desc = 'View one of the dapps hosted on DappHub.';
+export const desc = 'Visit one of the dapps hosted on DappHub.';
 
 export function builder(yargs:Argv) {
   yargs
@@ -16,5 +19,11 @@ export function builder(yargs:Argv) {
 
 export function handler(args:ArgShape<DappNameArg>) {
   const { DappName, hubUrl } = args;
-  open(`${hubUrl}/${DappName}`)
+  const url = `${hubUrl}/${DappName}`;
+  fastRender(
+    <SuccessBox result={{
+      message: `Opening ${url} now!`
+    }} />
+  )
+  open(url);
 }

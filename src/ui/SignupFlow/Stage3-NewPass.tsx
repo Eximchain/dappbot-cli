@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { useResource } from 'react-request-hook';
-import { ArgPrompt, ErrorBox, Loader } from '../helpers';
+import { ArgPrompt, ErrorBox, Loader, ChevronText } from '../helpers';
 import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 
 export interface StageNewPassProps {
@@ -27,7 +27,7 @@ export const StageNewPass: FC<StageNewPassProps> = ({ API, email, session, setPa
 
   if (newPass === '') return (
     <ArgPrompt hideVal
-      label="Please create a new password which has at least 8 characters, including upcase, locase, a number, &amp; a symbol."
+      label={<ChevronText>Please create a new password which has at least 8 characters, including upcase, locase, a number, &amp; a symbol.</ChevronText>}
       name='New Password'
       key='newPassPrompt'
       withResult={setNewPass} />
@@ -35,7 +35,7 @@ export const StageNewPass: FC<StageNewPassProps> = ({ API, email, session, setPa
 
   if (confirmPass === '') return (
     <ArgPrompt hideVal
-      label="Please confirm your new password; this must match the previous value."
+      label={<ChevronText>Please confirm your new password; this must match the previous value.</ChevronText>}
       name='New Password'
       key='confirmPassPrompt' 
       withResult={(confirmInput)=>{

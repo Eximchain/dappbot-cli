@@ -3,11 +3,11 @@ import fs from 'fs';
 import path from 'path';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { useResource } from 'react-request-hook';
-import { ArgPrompt, ErrorBox, Loader, TextBox } from '../helpers';
+import { ArgPrompt, ErrorBox, Loader, TextBox, ChevronText, Rows, SuccessBox, SuccessLabel } from '../helpers';
 import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { isAuthData } from '@eximchain/dappbot-types/spec/user';
 import { DEFAULT_DATA_PATH } from '../../cli';
-import { Static } from 'ink';
+import { Static, Box, Text } from 'ink';
 
 export interface StageFinalLoginProps {
   API: DappbotAPI
@@ -31,7 +31,7 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
   if (authPath === '') {
     return (
       <ArgPrompt name='Path for authData'
-        label="Which file would you like to keep your authData in?  If you put it in the default location, DappBot will automatically read it without having to provide an option."
+        label={<ChevronText>Which file would you like to keep your authData in?  If you put it in the default location, DappBot will automatically read it without having to provide an option.</ChevronText>}
         defaultValue={DEFAULT_DATA_PATH}
         withResult={(val) => {
           setAuthPath(path.normalize(val)) 
@@ -49,10 +49,22 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
 
   return writeComplete && !isLoading ? (
     <Static>
-      <TextBox>Success!</TextBox>
-      <TextBox>Your account is all ready to go, you can start using DappBot right now.  Try running:</TextBox>
-      <TextBox>$ dappbot-cli api</TextBox>
-      <TextBox>to see a list of all the API commands you can access right from the terminal.</TextBox>
+      <Rows>
+        <Text><SuccessLabel />{' '}Your account is all ready to go!  You can start using DappBot right now.</Text>
+        <ChevronText>
+          Run <Text underline>dappbot truffle</Text> from a Truffle project directory to make a dapp for a deployed contract.
+        </ChevronText>
+        <ChevronText>
+          Run <Text underline>dappbot login</Text> from any directory to authenticate as <Text underline>{email}</Text> and run private commands.
+        </ChevronText>
+        <ChevronText>
+          Run <Text underline>dappbot api</Text> to see all the available API commands.
+        </ChevronText>
+        <ChevronText>
+          Run <Text underline>dappbot</Text> to see the high-level usage info.
+        </ChevronText>
+      </Rows>
+      <></>
     </Static>
   ) : (
     <Loader message={`Completing your login and saving the auth data to ${path.normalize(authPath)} ...`} />
