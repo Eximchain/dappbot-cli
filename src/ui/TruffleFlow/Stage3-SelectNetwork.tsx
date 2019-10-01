@@ -71,6 +71,16 @@ export const StageSelectNetwork: FC<StageSelectNetworkProps> = (props) => {
     <ArgPrompt
       key='enter-url'
       name="Web3URL"
+      isValid={val => {
+        try {
+          const newUrl = new URL(val);
+          return newUrl.protocol !== 'https:' ?
+            `Your Web3 URL must begin with https, not ${newUrl.protocol}` :
+            null;
+        } catch (TypeError) {
+          return 'Please enter a valid URL; make sure you have https://'
+        }
+      }}
       label={progressMsgs.concat([
         <ChevronText key='custom-rpc'>We don't have an RPC URL on hand to communicate with this network.  Please provide a full Web3 HTTPProvider URL, including the https://.</ChevronText>
       ])}

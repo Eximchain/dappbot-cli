@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
-import { Box } from 'ink';
+import { Box, Text } from 'ink';
 import TextInput, { InkTextInputProps } from 'ink-text-input';
-import { BoxPads, Rows } from '.';
+import { BoxPads, Rows, ErrorLabel } from '.';
 import { StringElt } from '..';
 
 
@@ -18,24 +18,41 @@ export type ArgPromptProps = {
    * value is correct, or an error string if it's
    * incorrect.
    */
-  isValid?: (val:any) => null | string
+  isValid?: (val:string) => null | string
 }
 
 export const ArgPrompt:FC<ArgPromptProps> = (props) => {
   const { name, defaultValue, withResult } = props;
   const [value, setValue] = useState(defaultValue || '');
+  const [error, setError] = useState('');
+
   let basePrompt = `${name}`;
   if (defaultValue) basePrompt += ' (Press enter to accept default)';
   basePrompt += ':';
+
   let inputProps:InkTextInputProps = {
     value: value,
     onChange: setValue,
     onSubmit: withResult
   };
-  if (props.hideVal) inputProps.mask = '*';
-  inputProps.onSubmit = !props.isValid ? withResult : (val:string) => {
 
+  if (props.hideVal) inputProps.mask = '*';
+
+  inputProps.onSubmit = (val:string) => {
+    if (!props.isValid) return withResult(val);
+    const errMsg = props.isValid(val);
+    if (errMsg) {
+      setError(errMsg)
+    } else {
+      withResult(val);
+    }
   }
+
+  inputProps.onChange = (val:string) => {
+    if (error !== '') setError('');
+    setValue(val);
+  }
+
   let body = (
     <>
       <Box marginRight={1}>{ basePrompt }</Box>
@@ -46,11 +63,19 @@ export const ArgPrompt:FC<ArgPromptProps> = (props) => {
   if (!props.label) return (
     <BoxPads>{body}</BoxPads>
   )
+
+  let errMsg = error !== '' ? (
+    <Text>
+      <ErrorLabel errorType='validation' />
+      {' '+error}
+    </Text>
+  ) : null;
   
   return (
     <Rows>
       { props.label }
       { body }
+      { errMsg }
     </Rows>
   )
 }
