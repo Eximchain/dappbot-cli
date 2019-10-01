@@ -1,6 +1,6 @@
 {
 	"name": "@eximchain/dappbot-cli",
-	"version": "0.0.10",
+	"version": "0.1.1",
 	"license": "MIT",
 	"main": "build/cli.js",
 	"bin": {
@@ -13,7 +13,8 @@
 		"test": "xo && ava",
 		"build": "tsc",
 		"start": "node build/cli.js",
-		"prepare": "npm run build"
+		"prepare": "npm run build",
+		"postinstall": "node build/cli.js onboarding"
 	},
 	"dependencies": {
 		"@eximchain/dappbot-api-client": "^1.1.0",

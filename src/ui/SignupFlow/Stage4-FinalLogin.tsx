@@ -33,6 +33,9 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
       <ArgPrompt name='Path for authData'
         label={<ChevronText>Which file would you like to keep your authData in?  If you put it in the default location, DappBot will automatically read it without having to provide an option.</ChevronText>}
         defaultValue={DEFAULT_DATA_PATH}
+        isValid={(val) => {
+          return val.endsWith('.json') ? null : 'Path must end in .json'
+        }}
         withResult={(val) => {
           setAuthPath(path.normalize(val)) 
           requestLogin({
