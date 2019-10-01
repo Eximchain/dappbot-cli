@@ -31,21 +31,21 @@ yargs
 		authPath : {
 			alias: 'a',
 			normalize: true,
-			description: 'The path to a file with saved DappBot auth data.'
+			description: 'The path to a JSON file with saved DappBot auth data.'
 		},
 		apiUrl: {
 			description: "The URL for DappBot's API.",
-			default: 'https://cli-api.eximchain-dev.com',
+			default: 'https://api.dapp.bot',
 			group: 'URL Options:'
 		},
 		mngrUrl: {
 			description: "The URL for DappBot's management app",
-			default: 'https://cli-mngr.eximchain-dev.com',
+			default: 'https://dapp.bot',
 			group: 'URL Options:'
 		},
 		hubUrl: {
 			description: 'The URL for DappHub.',
-			default: 'https://cli-hub.eximchain-dev.com',
+			default: 'https://hub.dapp.bot',
 			group: 'URL Options:'
 		}
 	})
@@ -62,5 +62,6 @@ yargs
 	.hide('help')
 	.hide('version')
 	.epilog('Made by Eximchain Pte. Ltd.')
+	.config('config', "Path to a JSON config file; all of the file's keys will be treated like options.")
 	.argv
 	

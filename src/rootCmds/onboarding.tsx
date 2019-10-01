@@ -21,6 +21,7 @@ export function handler(args: ArgShape<DappNameArg>) {
       <Rows>
         <BigText text='DappBot'
           align='center'
+          space={false}
           lineHeight={2}
           colors={['#267EDC','#267EDC','#267EDC']}
           font='chrome' />

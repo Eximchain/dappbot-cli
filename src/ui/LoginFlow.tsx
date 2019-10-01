@@ -51,6 +51,7 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
     return (
       <ArgPrompt name='Path for auth data'
         defaultValue={DEFAULT_DATA_PATH}
+        isValid={val => val.endsWith('.json') ? null : 'Path must end in .json'}
         label={
           <ChevronText>Where would you like to keep your authData file?  If you put it in the default location, DappBot will automatically read it without having to provide an option.</ChevronText>
         }
