@@ -9,7 +9,7 @@ import { TruffleArtifact } from '../../services/util';
 import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
 import { useResource } from 'react-request-hook';
 
-export interface StageConfirmDapp {
+export interface StagePerformRequestProps {
   API: DappbotAPI
   isUpdate: boolean
   artifact: TruffleArtifact
@@ -18,7 +18,7 @@ export interface StageConfirmDapp {
   ContractAddr: string
 }
 
-export const StageConfirmDapp: FC<StageConfirmDapp> = (props) => {
+export const StagePerformRequest: FC<StagePerformRequestProps> = (props) => {
   const { DappName, Web3URL, ContractAddr, API, isUpdate, artifact } = props;
   const Abi = JSON.stringify(artifact.abi);
   const req = isUpdate ?
@@ -58,4 +58,4 @@ export const StageConfirmDapp: FC<StageConfirmDapp> = (props) => {
 
 }
 
-export default StageConfirmDapp;
+export default StagePerformRequest;

@@ -48,16 +48,22 @@ export const StageConfirmDapp: FC<StageConfirmDapp> = (props) => {
     return nameB.length - nameA.length
   });
 
+  const dappDetails = {
+    'Dapp Name': DappName,
+    'Contract': `${artifact.contract_name} (${AbiFxns.length} functions, including ${AbiFxns[0]} & ${AbiFxns[1]})`,
+    'Network': networkName,
+    'Deployed Address': ContractAddr,
+  } as { [key:string] : string };
+
+  if (possibleNetworks === undefined) {
+    dappDetails['Web3 URL'] = Web3URL;
+  }
+  
   return (
     <Box flexDirection='column' margin={1}>
       <ChevronText>Before we { isUpdate ? 'update' : 'create'} your dapp, let's make sure it's exactly what you want.</ChevronText>
       <Box flexDirection='row' marginX={1}>
-        <ItemList items={{
-          'Dapp Name': DappName,
-          'Contract': `${artifact.contract_name} (${AbiFxns.length} functions, including ${AbiFxns[0]} & ${AbiFxns[1]})`,
-          'Network': networkName,
-          'Deployed Address': ContractAddr,
-        }} />
+        <ItemList items={dappDetails} />
       </Box>
       <Box flexDirection='row'>
         <Select
