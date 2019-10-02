@@ -5,7 +5,6 @@ import { fastRender } from '../services/util';
 import React from 'react';
 import { Box } from 'ink';
 import { ItemList, Rows, ChevronText } from '../ui';
-import { Argv } from 'yargs';
 
 export const command = 'onboarding';
 
@@ -14,7 +13,9 @@ export const desc = false;
 export const builder = {};
 
 export function handler(args: ArgShape<DappNameArg>) {
-  // console.log(process.env.NODE_ENV)
+  // The <BigText /> component declares incomplete PropTypes
+  // which cause a warning during render. Forcing NODE_ENV
+  // to 'production' makes those warnings be quiet.
   process.env.NODE_ENV = 'production';
   fastRender(
     <Box margin={1}>
