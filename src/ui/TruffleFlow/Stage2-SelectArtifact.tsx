@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { Text } from 'ink';
 import { TruffleArtifact } from '../../services/util';
-import { Rows, Select, ChevronText } from '../helpers';
+import { Select, ChevronText } from '../helpers';
 import { StringElt } from '.';
 
 export interface StageSelectArtifactProps {

@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { Select, ChevronText, ItemList, ChainName } from '../helpers';
-import { TruffleArtifact, ChainsById } from '../../services/util';
+import { TruffleArtifact } from '../../services/util';
 import { Box } from 'ink';
+import { Chain } from '@eximchain/dappbot-types/spec/dapp';
 
 export interface StageConfirmDapp {
   isUpdate: boolean
@@ -29,7 +30,7 @@ export const StageConfirmDapp: FC<StageConfirmDapp> = (props) => {
 
   if (!networkArtifact) throw new Error('Artifact should always be found.');
   let networkNum = parseInt(networkArtifact.chainId);
-  const possibleNetworks = ChainsById[networkNum];
+  const possibleNetworks = Chain.detailsById()[networkNum];
   if (possibleNetworks === undefined) {
     networkName = ChainName(networkNum)
   } else if (possibleNetworks.length === 1) {
