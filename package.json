@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@eximchain/dappbot-api-client": "^1.1.0",
-		"@eximchain/dappbot-types": "^1.6.0",
+		"@eximchain/dappbot-types": "^1.6.1",
 		"@types/ink-spinner": "^2.0.1",
 		"@types/lodash.flatten": "^4.4.6",
 		"@types/lodash.groupby": "^4.6.6",

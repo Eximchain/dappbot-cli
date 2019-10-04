@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import User from '@eximchain/dappbot-types/spec/user';
 import { MethodAbi } from 'ethereum-types';
-import { ArgShape, DEFAULT_DATA_PATH, AdditionalArgs, UniversalArgs } from "../cli";
+import { ArgShape, DEFAULT_DATA_PATH, DEFAULT_CONFIG_PATH, UniversalArgs } from "../cli";
 import groupBy from 'lodash.groupby';
 
 
@@ -82,17 +82,20 @@ export function loadFileFromPath(args:ArgShape): ArgShape {
   return args;
 }
 
-/**
- * 
- * @param args 
- */
+export function addDefaultConfigIfPresent(args:ArgShape): ArgShape {
+  if (args.config) return args;
+  const defaultPath = path.resolve(process.cwd(), DEFAULT_CONFIG_PATH);
+  if (!fs.existsSync(defaultPath)) return args;
+  Object.assign(args, JSON.parse(fs.readFileSync(defaultPath).toString()))
+  return args;
+}
+
+
 export function addDefaultAuthIfPresent(args:ArgShape): ArgShape {
-  if (!args.authPath) {
-    const defaultPath = path.resolve(process.cwd(), DEFAULT_DATA_PATH);
-    if (fs.existsSync(defaultPath)) {
-      args.authPath = defaultPath;
-    }
-  }
+  if (args.authPath) return args;
+  const defaultPath = path.resolve(process.cwd(), DEFAULT_DATA_PATH);
+  if (!fs.existsSync(defaultPath)) return args;
+  args.authPath = defaultPath;
   return args;
 }
 
