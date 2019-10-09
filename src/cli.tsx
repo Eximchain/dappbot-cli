@@ -32,7 +32,7 @@ yargs
 		authPath : {
 			alias: 'a',
 			normalize: true,
-			description: 'The path to a JSON file with saved DappBot auth data.'
+			description: "The path to a JSON file with saved DappBot auth data; defaults to './dappbotAuthData.json'."
 		},
 		apiUrl: {
 			description: "The URL for DappBot's API.",
