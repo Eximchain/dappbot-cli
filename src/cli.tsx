@@ -2,10 +2,11 @@
 import yargs, { Arguments } from 'yargs';
 import fs from 'fs';
 import path from 'path';
-import { loadFileFromPath, addDefaultAuthIfPresent } from './services/util';
+import { loadFileFromPath, addDefaultAuthIfPresent, addDefaultConfigIfPresent } from './services/util';
 
 const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
+export const DEFAULT_CONFIG_PATH = './dappbotConfig.json';
 export const DEFAULT_DATA_PATH = './dappbotAuthData.json';
 export interface DappNameArg {
   DappName: string
@@ -31,7 +32,7 @@ yargs
 		authPath : {
 			alias: 'a',
 			normalize: true,
-			description: 'The path to a JSON file with saved DappBot auth data.'
+			description: "The path to a JSON file with saved DappBot auth data; defaults to './dappbotAuthData.json'."
 		},
 		apiUrl: {
 			description: "The URL for DappBot's API.",
@@ -50,6 +51,7 @@ yargs
 		}
 	})
 	.middleware(addDefaultAuthIfPresent)
+	.middleware(addDefaultConfigIfPresent)
 	.middleware(loadFileFromPath)
 	.commandDir('rootCmds')
 	.usage('Usage: dappbot <command>')
@@ -62,6 +64,6 @@ yargs
 	.hide('help')
 	.hide('version')
 	.epilog('Made by Eximchain Pte. Ltd.')
-	.config('config', "Path to a JSON config file; all of the file's keys will be treated like options.")
+	.config('config', "Path to a JSON config file; defaults to './dappbotConfig.json'.  \nAll of the file's keys will be treated like options.")
 	.argv
 	

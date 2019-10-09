@@ -1,6 +1,6 @@
 import { HttpMethods } from '@eximchain/dappbot-types/spec/responses';
 import { RequestError } from 'react-request-hook';
-import { ChainIdentity } from '../../services/util';
+import { Chain } from '@eximchain/dappbot-types/spec/dapp';
 
 export const LIGHT_BLUE = '#78B4F2';
 export const EXIM_BLUE = '';
@@ -19,17 +19,17 @@ export function errMsgFromResource(error:RequestError):string {
   return errMsg;
 }
 
-export function ChainName(chainId:number, chain?:ChainIdentity) {
+export function ChainName(chainId:number, chain?:Chain.Details) {
   return chain ? (
-    `${chain.displayName} - Chain ID ${chain.chainId}`
+    `${chain.displayName} - Chain ID ${chain.id}`
   ) : (
     `Custom Chain - Chain ID ${chainId}`
   )
 }
 
-export function ChainOption(chainId:number, chain?:ChainIdentity) {
+export function ChainOption(chainId:number, chain?:Chain.Details) {
   return chain ? ({
-    label: ChainName(chainId, chain), value: chain.key
+    label: ChainName(chainId, chain), value: chain.name
   }) : ({
     label: ChainName(chainId), value: chainId
   })

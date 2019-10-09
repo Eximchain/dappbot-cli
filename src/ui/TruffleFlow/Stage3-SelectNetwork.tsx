@@ -2,9 +2,10 @@ import React, { FC, useState } from 'react';
 import { Text } from 'ink';
 import flatten from 'lodash.flatten';
 import { ArgPrompt, ChainOption, ChevronText, Select } from '../helpers';
-import { TruffleArtifact, ChainIdentities, ChainsById } from '../../services/util';
+import { TruffleArtifact } from '../../services/util';
 import { XOR } from 'ts-xor';
 import { StringElt } from '.';
+import { Chain } from '@eximchain/dappbot-types/spec/dapp';
 
 export interface StageSelectNetworkProps {
   artifact: TruffleArtifact
@@ -16,7 +17,6 @@ export interface StageSelectNetworkProps {
 
 export const StageSelectNetwork: FC<StageSelectNetworkProps> = (props) => {
   const { artifact, setWeb3URL, setContractAddr, progressMsgs, addProgressMsg } = props; 
-
   // Compile chainIds present in artifact
   const [needCustomWeb3, setNeedCustomWeb3] = useState(null as XOR<null, boolean>);
   const networkIds = Object.keys(artifact.networks);
@@ -24,7 +24,7 @@ export const StageSelectNetwork: FC<StageSelectNetworkProps> = (props) => {
     .map(netId => parseInt(netId))
     .filter(netId => netId !== NaN)
     .map(networkId => {
-      let matchingChains = ChainsById[networkId];
+      let matchingChains = Chain.detailsById()[networkId];
       if (matchingChains === undefined) {
         // Custom network option
         return ChainOption(networkId);
@@ -54,9 +54,9 @@ export const StageSelectNetwork: FC<StageSelectNetworkProps> = (props) => {
           setNeedCustomWeb3(true);
           setContractAddr(networkItem.address);
         } else {
-          const chosenNetwork = ChainIdentities.find(chain => chain.key === item.value)
+          const chosenNetwork = Chain.detailsByName()[item.value];
           if (!chosenNetwork) throw new Error("This should always be found.");
-          const networkItem = artifact.networks[chosenNetwork.chainId.toString()]
+          const networkItem = artifact.networks[chosenNetwork.id.toString()]
           setNeedCustomWeb3(false);
           setContractAddr(networkItem.address);
           setWeb3URL(chosenNetwork.web3Url);

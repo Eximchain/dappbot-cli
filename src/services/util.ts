@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import User from '@eximchain/dappbot-types/spec/user';
 import { MethodAbi } from 'ethereum-types';
-import { ArgShape, DEFAULT_DATA_PATH, AdditionalArgs, UniversalArgs } from "../cli";
+import { ArgShape, DEFAULT_DATA_PATH, DEFAULT_CONFIG_PATH, UniversalArgs } from "../cli";
 import groupBy from 'lodash.groupby';
 
 
@@ -82,17 +82,20 @@ export function loadFileFromPath(args:ArgShape): ArgShape {
   return args;
 }
 
-/**
- * 
- * @param args 
- */
+export function addDefaultConfigIfPresent(args:ArgShape): ArgShape {
+  if (args.config) return args;
+  const defaultPath = path.resolve(process.cwd(), DEFAULT_CONFIG_PATH);
+  if (!fs.existsSync(defaultPath)) return args;
+  Object.assign(args, JSON.parse(fs.readFileSync(defaultPath).toString()))
+  return args;
+}
+
+
 export function addDefaultAuthIfPresent(args:ArgShape): ArgShape {
-  if (!args.authPath) {
-    const defaultPath = path.resolve(process.cwd(), DEFAULT_DATA_PATH);
-    if (fs.existsSync(defaultPath)) {
-      args.authPath = defaultPath;
-    }
-  }
+  if (args.authPath) return args;
+  const defaultPath = path.resolve(process.cwd(), DEFAULT_DATA_PATH);
+  if (!fs.existsSync(defaultPath)) return args;
+  args.authPath = defaultPath;
   return args;
 }
 
@@ -134,81 +137,6 @@ export function pathExists(fileName:string|string[], dir:string):boolean {
     return exists(fileName);
   }
 }
-
-export enum SupportedChains {
-  Eximchain = 'eximchain',
-  EximGamma = 'eximchainGamma',
-  Ethereum = 'ethereum',
-  Ropsten = 'ropsten',
-  Kovan = 'kovan',
-  Rinkeby = 'rinkeby',
-  Goerli = 'goerli'
-}
-
-export interface ChainIdentity {
-  chainId: number
-  genesisHash: string
-  web3Url: string
-  key: SupportedChains
-  displayName: string
-}
-
-// Dropping this key until I know I have a valid gamma tx executor
-// to point Dapps at.
-//
-// {
-//   chainId : 1,
-//   genesisHash : '0x6a2d1d7602dbebc139cf9598607bf012d30da83954aab5f731d7550feb283bdc',
-//   key : SupportedChains.EximGamma,
-//   displayName : 'Eximchain (Gamma)'
-// },
-
-export const ChainIdentities:ChainIdentity[] = [
-  {
-    chainId : 1,
-    genesisHash : '0x722138a9f3635c65747a8e2eeac7e7963846fb952b8931da257395fd7656c3dd',
-    web3Url: "https://tx-executor-stress-test.eximchain.com",
-    key : SupportedChains.Eximchain,
-    displayName : 'Eximchain (Main Net)'
-  },
-  {
-    chainId : 1,
-    genesisHash : '0xd4e56740f876aef8c010b86a40d5f56745a118d0906a34e69aec8c0db1cb8fa3',
-    web3Url: "https://mainnet.infura.io/v3/45c2433b314e4ad09674978a2b9cce43",
-    key : SupportedChains.Ethereum,
-    displayName : 'Ethereum (Main Net)'
-  },
-  {
-    chainId : 3,
-    genesisHash : '0x41941023680923e0fe4d74a34bdac8141f2540e3ae90623718e47d66d1ca4a2d',
-    web3Url: "https://ropsten.infura.io/v3/f084d60882a94d76bfb3b587af30e8e6",
-    key : SupportedChains.Ropsten,
-    displayName : 'Ethereum (Ropsten)'
-  },
-  {
-    chainId : 42,
-    genesisHash : '0xa3c565fc15c7478862d50ccd6561e3c06b24cc509bf388941c25ea985ce32cb9',
-    web3Url: "https://kovan.infura.io/v3/c58eda7787d342c7b41f8a3f38893def",
-    key : SupportedChains.Kovan,
-    displayName : 'Ethereum (Kovan)'
-  },
-  {
-    chainId : 4,
-    genesisHash : '0x6341fd3daf94b748c72ced5a5b26028f2474f5f00d824504e4fa37a75767e177',
-    key : SupportedChains.Rinkeby,
-    web3Url: "https://rinkeby.infura.io/v3/70a3fea548984fffbe86de56093b8044",
-    displayName : 'Ethereum (Rinkeby)'
-  },
-  {
-    chainId : 5,
-    genesisHash : '0xbf7e331f7f7c1dd2e05159666b3bf8bc7a8a3a9eb1d518969eab529dd9b88c1a',
-    key : SupportedChains.Goerli,
-    web3Url: 'https://goerli.infura.io/v3/55454709df7f4e54a660ceb5ad5a844c',
-    displayName : 'Ethereum (Goerli)'
-  }
-]
-
-export const ChainsById = groupBy(ChainIdentities, identity => identity.chainId);
 
 /**
  * These interfaces do not represent a full Truffle artifact,
