@@ -11,8 +11,8 @@
 		"dappbot": "build/cli.js"
 	},
 	"repository": {
-		"type" : "git",
-		"url" : "https://github.com/Eximchain/dappbot-cli"
+		"type": "git",
+		"url": "https://github.com/Eximchain/dappbot-cli"
 	},
 	"engines": {
 		"node": ">=8"
@@ -27,12 +27,14 @@
 	"dependencies": {
 		"@eximchain/dappbot-api-client": "^1.1.0",
 		"@eximchain/dappbot-types": "^1.6.1",
+		"@types/analytics-node": "^3.1.1",
 		"@types/ink-spinner": "^2.0.1",
 		"@types/lodash.flatten": "^4.4.6",
 		"@types/lodash.groupby": "^4.6.6",
 		"@types/node": "^12.7.5",
 		"@types/shelljs": "^0.8.5",
 		"@types/yargs": "^13.0.2",
+		"analytics-node": "^3.4.0-beta.1",
 		"axios": "^0.19.0",
 		"completarr": "^0.2.2",
 		"ethereum-types": "^2.1.6",

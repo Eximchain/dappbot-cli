@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { loadFileFromPath, addDefaultAuthIfPresent, addDefaultConfigIfPresent } from './services/util';
 
-const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
+export const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
 export const DEFAULT_CONFIG_PATH = './dappbotConfig.json';
 export const DEFAULT_DATA_PATH = './dappbotAuthData.json';

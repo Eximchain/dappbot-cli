@@ -1,12 +1,14 @@
 import { Argv, PositionalOptions, MiddlewareFunction } from "yargs";
 import { render } from 'ink';
+import Analytics from 'analytics-node';
 import fs from 'fs';
 import path from 'path';
-import User from '@eximchain/dappbot-types/spec/user';
 import { MethodAbi } from 'ethereum-types';
+import User from '@eximchain/dappbot-types/spec/user';
 import { ArgShape, DEFAULT_DATA_PATH, DEFAULT_CONFIG_PATH, UniversalArgs } from "../cli";
-import groupBy from 'lodash.groupby';
 
+const WRITE_KEY = 'aMv7BUcQfCSy8XYMBgXYMdLMr8fkhI4a';
+export const analytics = new Analytics(WRITE_KEY, { flushAt: 1})
 
 export const fastRender:typeof render = (tree) => {
   // @ts-ignore Types don't know about fastmode
