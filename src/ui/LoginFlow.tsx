@@ -7,6 +7,7 @@ import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
 import { Loader, errMsgFromResource, SuccessBox, ErrorBox, ChevronText } from './helpers';
+import { analytics } from '../services/util';
 import { DEFAULT_DATA_PATH } from '../cli';
 
 export interface LoginFlowProps {
@@ -26,6 +27,10 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
       Responses.isSuccessResponse(data) &&
       User.isAuthData(data.data)
     ) {
+      analytics.track({
+        event: 'Successful CLI Login',
+        userId: data.data.User.Email
+      })
       const authData = data.data;
       const authPath = path.resolve(process.cwd(), dataPath);
       fs.writeFileSync(authPath, JSON.stringify(authData, null, 2));
@@ -72,6 +77,7 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
     let followonMsg = dataPath === DEFAULT_DATA_PATH ?
       `Your auth data will be automatically inferred from ${dataPath} for private commands.` :
       `Please include the authPath option (e.g. $ dappbot --authPath ${dataPath} ...) for private commands.`
+    
     return (
       <SuccessBox permanent result={{
         message: `You are now logged in! ${followonMsg}`
