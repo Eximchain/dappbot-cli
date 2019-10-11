@@ -5,9 +5,10 @@ import {
   Loader, errMsgFromResource, ErrorBox, Rows, 
   ChevronText, SuccessLabel
 } from '../helpers';
-import { TruffleArtifact } from '../../services/util';
+import { TruffleArtifact, analytics } from '../../services/util';
 import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
 import { useResource } from 'react-request-hook';
+import Responses from '@eximchain/dappbot-types/spec/responses';
 
 export interface StagePerformRequestProps {
   API: DappbotAPI
@@ -34,6 +35,20 @@ export const StagePerformRequest: FC<StagePerformRequestProps> = (props) => {
   useEffect(function callOnMount(){
     makeReq()
   }, [])
+
+  useEffect(function trackResponse(){
+    if (data && Responses.isSuccessResponse(data)) {
+      // if (isUpdate) {
+      //   analytics.track({
+
+      //   })
+      // } else {
+      //   analytics.track({
+
+      //   })
+      // }
+    }
+  }, [data]);
 
   // Second clause here handles the very first render
   // before the effect is triggered.

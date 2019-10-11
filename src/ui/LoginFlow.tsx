@@ -28,8 +28,11 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
       User.isAuthData(data.data)
     ) {
       analytics.track({
-        event: 'Successful CLI Login',
+        event: 'CLI Login',
         userId: data.data.User.Email
+      })
+      analytics.identify({
+
       })
       const authData = data.data;
       const authPath = path.resolve(process.cwd(), dataPath);

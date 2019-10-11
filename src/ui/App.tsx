@@ -3,10 +3,11 @@ import path from 'path';
 import fs from 'fs';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { newAuthData, AuthData } from '@eximchain/dappbot-types/spec/user';
-import { ArgShape, AdditionalArgs } from '../cli';
+import { ArgShape, AdditionalArgs, npmPackage } from '../cli';
 import { Loader } from './helpers';
 import { RequestProvider } from 'react-request-hook';
 import axios from 'axios';
+import { analytics } from '../services/util';
 
 export type RenderFuncProps<Additional extends AdditionalArgs = AdditionalArgs> = (props: {
   API: DappbotAPI
@@ -38,6 +39,13 @@ function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<A
 
   useEffect(function refreshIfStale() {
     if (API.hasStaleAuth()) API.refreshAuth()
+    analytics.identify({
+      userId: authData.User.Email,
+      traits: {
+        cliVersion: npmPackage.version,
+        apiUrl: args.apiUrl
+      }
+    })
   }, [API, authData])
 
   return API.hasStaleAuth() ? (
