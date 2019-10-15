@@ -16,7 +16,7 @@ export interface StageSetDappNameProps {
 
 export const StageSetDappName: FC<StageSetDappNameProps> = ({ API, artifact, setDappName, progressMsgs, addProgressMsg }) => {
   // Determine whether their contract name is available
-  const contractName = artifact.contract_name;
+  const contractName = artifact.contract_name.toLowerCase();
   const [desiredName, setDesiredName] = useState(contractName);
   const [isAvailable, setIsAvailable] = useState(false);
   const [checkResponse, checkIfAvailable] = useResource(API.public.viewDapp.resource);

@@ -37,7 +37,7 @@ const SelectDappToUpdate: FC<SelectUpdateProps> = ({ dapps, setIsUpdate, setDapp
   })
   function selectDapp(item:Item){
     setDappName(item.label);
-    addProgressMsg(<ChevronText>Updating the <Text underline>{item.label}</Text> dapp.</ChevronText>);
+    addProgressMsg(<ChevronText key='final-update-select-row'>Updating the <Text underline>{item.label}</Text> dapp.</ChevronText>);
     setIsUpdate(true);
   }
   useEffect(function autoSelectLoneDapp() {
@@ -103,9 +103,9 @@ export const StageCreateOrUpdate: FC<StageCreateOrUpdateProps> = (props) => {
           <SelectDappToUpdate {...{ dapps, setIsUpdate, setDappName, addProgressMsg }}
             key='forced-update'
             label={[
-              <ChevronText key='row1'>You have already created {dapps.length} of the {allowedDapps} dapps in your subscription.</ChevronText>,
-              <ChevronText indent={1} key='row2'>Usage Hint: To buy more dapps, run <Text underline>dappbot billing</Text> to visit the billing page.</ChevronText>,
-              <ChevronText key='row3'>If you would like to continue by updating one of your existing dapps, which dapp would you like to update?</ChevronText>
+              <ChevronText key='forc-1'>You have already created {dapps.length} of the {allowedDapps} dapps in your subscription.</ChevronText>,
+              <ChevronText indent={1} key='force-2'>Usage Hint: To buy more dapps, run <Text underline>dappbot billing</Text> to visit the billing page.</ChevronText>,
+              <ChevronText key='force-3'>If you would like to continue by updating one of your existing dapps, which dapp would you like to update?</ChevronText>
             ]} />
         )
       } else {
@@ -118,8 +118,8 @@ export const StageCreateOrUpdate: FC<StageCreateOrUpdateProps> = (props) => {
       <Select
         key='create-or-update'
         label={[
-          <ChevronText key='row1'>You have only created {dapps.length} of the {allowedDapps} dapps in your subscription.</ChevronText>,
-          <ChevronText key='row2'>Would you like to create a new dapp, or update one of your existing ones?</ChevronText>
+          <ChevronText key='c-o-u-1'>You have only created {dapps.length} of the {allowedDapps} dapps in your subscription.</ChevronText>,
+          <ChevronText key='c-o-u-2'>Would you like to create a new dapp, or update one of your existing ones?</ChevronText>
         ]}
         items={[
           { label: 'Create', value: 'Create' },

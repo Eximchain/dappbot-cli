@@ -36,7 +36,7 @@ export interface SelectProps extends InkSelectInputProps {
 
 export const Select:FC<SelectProps> = (props) => {
   let body = (
-    <SelectInput {...props} 
+    <SelectInput {...props} key='actual-input'
       indicatorComponent={Indicator}
       itemComponent={Item} />
   )
