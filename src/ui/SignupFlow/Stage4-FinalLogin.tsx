@@ -3,11 +3,11 @@ import fs from 'fs';
 import path from 'path';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { useResource } from 'react-request-hook';
-import { ArgPrompt, ErrorBox, Loader, TextBox, ChevronText, Rows, SuccessBox, SuccessLabel } from '../helpers';
+import { ArgPrompt, ErrorBox, Loader, ChevronText, Rows, SuccessLabel } from '../helpers';
 import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { isAuthData } from '@eximchain/dappbot-types/spec/user';
 import { DEFAULT_DATA_PATH } from '../../cli';
-import { Static, Box, Text } from 'ink';
+import { Static, Text } from 'ink';
 import { analytics, standardTrackProps } from '../../services/util';
 
 export interface StageFinalLoginProps {

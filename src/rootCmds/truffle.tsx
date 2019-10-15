@@ -2,7 +2,7 @@ import React from 'react';
 import path from 'path';
 import fs from 'fs';
 import shell from 'shelljs';
-import { fastRender, pathExists, cleanExit, isTruffleArtifact, TruffleArtifact, requireAuthData } from "../services/util";
+import { fastRender, pathExists, isTruffleArtifact, TruffleArtifact, requireAuthData } from "../services";
 import { App, TruffleFlow, ErrorBox } from "../ui";
 import { ArgShape, UniversalArgs } from "../cli";
 import { Argv } from 'yargs';

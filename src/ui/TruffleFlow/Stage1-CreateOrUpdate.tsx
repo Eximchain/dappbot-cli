@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Text, Box } from 'ink';
+import { Text } from 'ink';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { useResource } from 'react-request-hook';
 import { ListDapps } from '@eximchain/dappbot-types/spec/methods/private';
@@ -9,7 +9,7 @@ import { XOR } from 'ts-xor';
 import Dapp from '@eximchain/dappbot-types/spec/dapp';
 import {
   Loader, ErrorBox, errMsgFromResource, ApiMethodLabel, SuccessBox,
-  Select, Rows, ChevronText
+  Select, ChevronText
 } from '../helpers';
 import { StringElt } from '.';
 import { Item } from 'ink-select-input';

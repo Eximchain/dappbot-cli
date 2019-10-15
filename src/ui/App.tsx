@@ -3,7 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { newAuthData, AuthData } from '@eximchain/dappbot-types/spec/user';
-import { ArgShape, AdditionalArgs, npmPackage } from '../cli';
+import { ArgShape, AdditionalArgs } from '../cli';
 import { Loader } from './helpers';
 import { RequestProvider } from 'react-request-hook';
 import axios from 'axios';

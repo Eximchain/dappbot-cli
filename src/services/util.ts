@@ -1,10 +1,8 @@
-import { Argv, PositionalOptions, MiddlewareFunction } from "yargs";
 import { render } from 'ink';
 import Analytics from 'analytics-node';
 import fs from 'fs';
 import path from 'path';
 import DappbotAPI from '@eximchain/dappbot-api-client';
-import User from '@eximchain/dappbot-types/spec/user';
 import { npmPackage } from "../cli";
 
 const WRITE_KEY = 'aMv7BUcQfCSy8XYMBgXYMdLMr8fkhI4a';

@@ -5,7 +5,6 @@ import { ArgPrompt, ErrorBox, Loader, ChevronText } from '../helpers';
 import { Payment } from '@eximchain/dappbot-types/spec/methods';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import { analytics, standardTrackProps } from '../../services/util';
-import { npmPackage } from '../../cli';
 
 export interface CreateAccountProps {
   API: DappbotAPI
