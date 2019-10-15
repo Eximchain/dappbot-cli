@@ -27,7 +27,7 @@ export function handler(args: ArgShape<Refresh.Args>) {
       return (
         <PrettyRequest 
           operation={ApiMethodLabel(Refresh.HTTP, Refresh.Path)}
-          req={() => API.auth.refresh.resource({ refreshToken })} />
+          resource={() => API.auth.refresh.resource({ refreshToken })} />
       )
     }
   }

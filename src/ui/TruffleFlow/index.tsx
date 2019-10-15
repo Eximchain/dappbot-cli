@@ -48,17 +48,6 @@ export const TruffleFlow:FC<TruffleFlowProps> = (props) => {
     setProgressMsgs([]);
   }
 
-  useEffect(function trackCall(){
-    const authData: User.AuthData = JSON.parse(authFile);
-    analytics.track({
-      userId: authData.User.Email,
-      event: 'CLI Truffle Flow',
-      properties: {
-        cliVersion: npmPackage.version
-      }
-    })
-  }, []);
-
   if (isUpdate === null) return (
     <CreateOrUpdate {...{ API, authFile, setIsUpdate, setDappName, addProgressMsg }} />
   )

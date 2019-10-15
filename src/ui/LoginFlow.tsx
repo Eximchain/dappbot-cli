@@ -7,7 +7,7 @@ import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
 import { Loader, errMsgFromResource, SuccessBox, ErrorBox, ChevronText } from './helpers';
-import { analytics } from '../services/util';
+import { analytics, standardTrackProps } from '../services/util';
 import { DEFAULT_DATA_PATH } from '../cli';
 
 export interface LoginFlowProps {
@@ -28,11 +28,16 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
       User.isAuthData(data.data)
     ) {
       analytics.track({
-        event: 'CLI Login',
-        userId: data.data.User.Email
-      })
-      analytics.identify({
-
+        event: 'User Login - CLI',
+        userId: data.data.User.Email,
+        properties: {
+          ...standardTrackProps(API),
+          // Manually setting email because we do not
+          // expect the API to already have valid auth
+          // within this flow.
+          email: data.data.User.Email,
+          isRefresh: false
+        }
       })
       const authData = data.data;
       const authPath = path.resolve(process.cwd(), dataPath);

@@ -23,7 +23,7 @@ export function handler(args: ArgShape<Login.Args>) {
       return (
         <PrettyRequest
           operation={ApiMethodLabel(Login.HTTP, Login.Path)}
-          req={() => API.auth.login.resource({
+          resource={() => API.auth.login.resource({
             username, password
           })} />
       )

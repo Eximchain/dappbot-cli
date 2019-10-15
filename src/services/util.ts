@@ -4,8 +4,9 @@ import Analytics from 'analytics-node';
 import fs from 'fs';
 import path from 'path';
 import { MethodAbi } from 'ethereum-types';
+import DappbotAPI from '@eximchain/dappbot-api-client';
 import User from '@eximchain/dappbot-types/spec/user';
-import { ArgShape, DEFAULT_DATA_PATH, DEFAULT_CONFIG_PATH, UniversalArgs } from "../cli";
+import { ArgShape, DEFAULT_DATA_PATH, DEFAULT_CONFIG_PATH, UniversalArgs, npmPackage } from "../cli";
 
 const WRITE_KEY = 'aMv7BUcQfCSy8XYMBgXYMdLMr8fkhI4a';
 export const analytics = new Analytics(WRITE_KEY, { flushAt: 1})
@@ -182,4 +183,12 @@ export function isNetworkMap(val:any): val is NetworkMap {
       )
     })
   )
+}
+
+export function standardTrackProps(API:DappbotAPI) {
+  return {
+    email: API.authData.User.Email,
+    apiUrl: API.dappbotUrl,
+    cliVersion: npmPackage.version as string
+  }
 }

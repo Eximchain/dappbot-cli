@@ -26,7 +26,7 @@ export function handler(args: ArgShape<DappNameArg>) {
       return (
         <PrettyRequest 
           operation={ApiMethodLabel(ReadDapp.HTTP, ReadDapp.Path(DappName))}
-          req={() => API.private.readDapp.resource(DappName)} />
+          resource={() => API.private.readDapp.resource(DappName)} />
       )
     }} />
   )

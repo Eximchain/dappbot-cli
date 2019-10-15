@@ -26,7 +26,7 @@ export function handler(args: ArgShape<BeginPassReset.Args>) {
       return (
         <PrettyRequest 
           operation={ApiMethodLabel(BeginPassReset.HTTP, BeginPassReset.Path)}
-          req={() => API.auth.beginPasswordReset.resource({ username })} />
+          resource={() => API.auth.beginPasswordReset.resource({ username })} />
       )
     }
   }

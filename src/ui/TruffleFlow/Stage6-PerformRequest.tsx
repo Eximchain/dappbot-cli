@@ -5,7 +5,7 @@ import {
   Loader, errMsgFromResource, ErrorBox, Rows, 
   ChevronText, SuccessLabel
 } from '../helpers';
-import { TruffleArtifact, analytics } from '../../services/util';
+import { TruffleArtifact, analytics, standardTrackProps } from '../../services/util';
 import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
 import { useResource } from 'react-request-hook';
 import Responses from '@eximchain/dappbot-types/spec/responses';
@@ -38,15 +38,27 @@ export const StagePerformRequest: FC<StagePerformRequestProps> = (props) => {
 
   useEffect(function trackResponse(){
     if (data && Responses.isSuccessResponse(data)) {
-      // if (isUpdate) {
-      //   analytics.track({
-
-      //   })
-      // } else {
-      //   analytics.track({
-
-      //   })
-      // }
+      if (isUpdate) {
+        analytics.track({
+          event: 'Dapp Updated - CLI - Truffle',
+          userId: API.authData.User.Email,
+          properties: {
+            ...standardTrackProps(API),
+            DappName, Web3URL, ContractAddr
+          }
+        })
+      } else {
+        analytics.track({
+          event: 'Dapp Created - CLI - Truffle',
+          userId: API.authData.User.Email,
+          properties: {
+            ...standardTrackProps(API),
+            Web3URL, ContractAddr, Abi,
+            GuardianURL: 'https://example.com',
+            Tier: Tiers.Standard
+          }
+        })
+      }
     }
   }, [data]);
 

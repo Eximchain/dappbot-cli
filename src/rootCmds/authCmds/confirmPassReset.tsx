@@ -28,7 +28,7 @@ export function handler(args: ArgShape<ConfirmPassReset.Args>) {
       return (
         <PrettyRequest
           operation={ApiMethodLabel(ConfirmPassReset.HTTP, ConfirmPassReset.Path)} 
-          req={() => API.auth.confirmPasswordReset.resource({
+          resource={() => API.auth.confirmPasswordReset.resource({
             username, newPassword, passwordResetCode
           })} />
       )

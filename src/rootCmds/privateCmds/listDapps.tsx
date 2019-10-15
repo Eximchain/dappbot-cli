@@ -20,7 +20,7 @@ export function handler(args: ArgShape) {
       return (
         <PrettyRequest
           operation={ApiMethodLabel(ListDapps.HTTP, ListDapps.Path)}
-          req={() => API.private.listDapps.resource()} />
+          resource={() => API.private.listDapps.resource()} />
       )
     }} />
   )
