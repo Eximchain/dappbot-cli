@@ -40,7 +40,7 @@ export const StagePerformRequest: FC<StagePerformRequestProps> = (props) => {
     if (data && Responses.isSuccessResponse(data)) {
       if (isUpdate) {
         analytics.track({
-          event: 'Dapp Updated - CLI - Truffle',
+          event: 'Dapp Updated - CLI:Truffle',
           userId: API.authData.User.Email,
           properties: {
             ...standardTrackProps(API),
@@ -49,7 +49,7 @@ export const StagePerformRequest: FC<StagePerformRequestProps> = (props) => {
         })
       } else {
         analytics.track({
-          event: 'Dapp Created - CLI - Truffle',
+          event: 'Dapp Created - CLI:Truffle',
           userId: API.authData.User.Email,
           properties: {
             ...standardTrackProps(API),
