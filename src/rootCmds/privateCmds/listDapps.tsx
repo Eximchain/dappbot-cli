@@ -2,7 +2,7 @@ import React from 'react';
 import { Argv } from 'yargs';
 import { App, PrettyRequest, ApiMethodLabel } from '../../ui';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender } from '../../services/util';
+import { requireAuthData, fastRender } from '../../services';
 import { ArgShape, UniversalArgs } from '../../cli';
 import { ListDapps } from '@eximchain/dappbot-types/spec/methods/private';
 
@@ -20,7 +20,7 @@ export function handler(args: ArgShape) {
       return (
         <PrettyRequest
           operation={ApiMethodLabel(ListDapps.HTTP, ListDapps.Path)}
-          req={() => API.private.listDapps.resource()} />
+          resource={() => API.private.listDapps.resource()} />
       )
     }} />
   )

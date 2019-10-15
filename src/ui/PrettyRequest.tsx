@@ -4,12 +4,12 @@ import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { Loader, ErrorBox, SuccessBox, errMsgFromResource } from './helpers';
 
 export interface PrettyRequestProps<ResponseType = any> {
-  req: () => Resource<ResponseType>
-  onComplete?: (response: ResponseType) => void
+  resource: () => Resource<ResponseType>
+  onSuccess?: (response: ResponseType) => void
   operation?: string
 }
 
-export const PrettyRequest: FC<PrettyRequestProps> = ({ req, onComplete, operation }) => {
+export const PrettyRequest: FC<PrettyRequestProps> = ({ resource: req, onSuccess: onComplete, operation }) => {
   const [response, request] = useResource(req);
   const { isLoading, data, error } = response;
 
@@ -18,7 +18,9 @@ export const PrettyRequest: FC<PrettyRequestProps> = ({ req, onComplete, operati
   }, [])
 
   useEffect(function handleSuccess() {
-    if (data && isSuccessResponse(data) && onComplete) onComplete(data.data);
+    if (isSuccessResponse(data) && onComplete) {
+      onComplete(data.data);
+    }
   }, [data])
 
   if (isLoading || (!data && !error)) {

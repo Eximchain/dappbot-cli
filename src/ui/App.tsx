@@ -7,6 +7,7 @@ import { ArgShape, AdditionalArgs } from '../cli';
 import { Loader } from './helpers';
 import { RequestProvider } from 'react-request-hook';
 import axios from 'axios';
+import { analytics, standardTrackProps } from '../services/util';
 
 export type RenderFuncProps<Additional extends AdditionalArgs = AdditionalArgs> = (props: {
   API: DappbotAPI
@@ -37,7 +38,17 @@ function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<A
   })
 
   useEffect(function refreshIfStale() {
-    if (API.hasStaleAuth()) API.refreshAuth()
+    if (API.hasStaleAuth()) {
+      API.refreshAuth()
+      analytics.track({
+        userId: API.authData.User.Email,
+        event: 'User Login - CLI',
+        properties: {
+          ...standardTrackProps(API),
+          isRefresh: true
+        }
+      })
+    }
   }, [API, authData])
 
   return API.hasStaleAuth() ? (

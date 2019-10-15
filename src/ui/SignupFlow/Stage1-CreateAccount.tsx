@@ -4,6 +4,7 @@ import { useResource } from 'react-request-hook';
 import { ArgPrompt, ErrorBox, Loader, ChevronText } from '../helpers';
 import { Payment } from '@eximchain/dappbot-types/spec/methods';
 import Responses from '@eximchain/dappbot-types/spec/responses';
+import { analytics, standardTrackProps } from '../../services/util';
 
 export interface CreateAccountProps {
   API: DappbotAPI
@@ -20,6 +21,17 @@ export const CreateAccount: FC<CreateAccountProps> = ({ API, setEmail }) => {
   useEffect(function handleResponse() {
     if (Responses.isSuccessResponse(data)) {
       setEmail(email);
+      analytics.track({
+        event: 'User Signup - CLI',
+        userId: email,
+        properties: {
+          ...standardTrackProps(API),
+          // Manually setting email because we do not
+          // expect the API to have any valid auth
+          // within this flow.
+          email, name
+        }
+      })
     } else {
       setLocalErr(data);
     }

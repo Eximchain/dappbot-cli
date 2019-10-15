@@ -1,7 +1,7 @@
 import React from 'react';
 import { Argv, Options } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender, cleanExit } from '../../services/util';
+import { requireAuthData, fastRender, analytics, standardTrackProps } from '../../services';
 import { ArgShape, DappNameArg, UniversalArgs } from '../../cli';
 import { CreateDapp } from '@eximchain/dappbot-types/spec/methods/private';
 import { App, PrettyRequest, ApiMethodLabel, ErrorBox } from '../../ui';
@@ -65,13 +65,21 @@ export function handler(args: ArgShape<CreateDapp.Args & DappNameArg>) {
   }
   const Abi = args.AbiFile;
   // TODO: Validate Abi, just for sanity's sake
+
+  const createArgs = { Web3URL, GuardianURL, ContractAddr, Tier, Abi };
   fastRender(
     <App args={args} renderFunc={({ API }) => {
       return (
         <PrettyRequest
           operation={ApiMethodLabel(CreateDapp.HTTP, CreateDapp.Path(DappName))}
-          req={() => API.private.createDapp.resource(DappName, {
-            Web3URL, GuardianURL, ContractAddr, Tier, Abi
+          resource={() => API.private.createDapp.resource(DappName, createArgs)} 
+          onSuccess={() => analytics.track({
+            event: 'Dapp Created - CLI',
+            userId: API.authData.User.Email,
+            properties: {
+              ...standardTrackProps(API),
+              DappName, ...createArgs
+            }
           })} />
       )
     }} />

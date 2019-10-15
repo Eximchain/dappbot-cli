@@ -3,11 +3,12 @@ import fs from 'fs';
 import path from 'path';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { useResource } from 'react-request-hook';
-import { ArgPrompt, ErrorBox, Loader, TextBox, ChevronText, Rows, SuccessBox, SuccessLabel } from '../helpers';
+import { ArgPrompt, ErrorBox, Loader, ChevronText, Rows, SuccessLabel } from '../helpers';
 import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { isAuthData } from '@eximchain/dappbot-types/spec/user';
 import { DEFAULT_DATA_PATH } from '../../cli';
-import { Static, Box, Text } from 'ink';
+import { Static, Text } from 'ink';
+import { analytics, standardTrackProps } from '../../services/util';
 
 export interface StageFinalLoginProps {
   API: DappbotAPI
@@ -26,6 +27,18 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
     let authData = data.data;
     fs.writeFileSync(path.resolve(process.cwd(), authPath), JSON.stringify(authData, null, 2))
     setWriteComplete(true);
+    analytics.track({
+      event: 'User Login - CLI',
+      userId: authData.User.Email,
+      properties: {
+        ...standardTrackProps(API),
+        // Manually setting email because this API
+        // will not be configured with the new auth
+        // from this very login.
+        email: authData.User.Email,
+        isRefresh: false
+      }
+    })
   }, [isLoading, data, error, authPath])
 
   if (authPath === '') {

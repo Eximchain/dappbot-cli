@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Select, ChevronText, ItemList, ChainName } from '../helpers';
-import { TruffleArtifact } from '../../services/util';
+import { TruffleArtifact } from '../../services';
 import { Box } from 'ink';
 import { Chain } from '@eximchain/dappbot-types/spec/dapp';
 

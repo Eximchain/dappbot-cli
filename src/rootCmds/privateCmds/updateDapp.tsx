@@ -1,8 +1,8 @@
 import React from 'react';
 import { Argv } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender, cleanExit } from '../../services/util';
-import { BaseOptions, GuardianURL } from './createDapp';
+import { requireAuthData, fastRender, analytics, standardTrackProps } from '../../services';
+import { BaseOptions } from './createDapp';
 import { UpdateDapp } from '@eximchain/dappbot-types/spec/methods/private';
 import { DappNameArg, ArgShape, UniversalArgs } from '../../cli';
 import { PrettyRequest, App, ApiMethodLabel, ErrorBox } from '../../ui';
@@ -59,7 +59,15 @@ export function handler(args:ArgShape<UpdateDapp.Args & DappNameArg>) {
     <App args={args} renderFunc={({ API }) => (
       <PrettyRequest 
         operation={ApiMethodLabel(UpdateDapp.HTTP, UpdateDapp.Path(DappName))}
-        req={() => API.private.updateDapp.resource(DappName, updateArg)} />
+        resource={() => API.private.updateDapp.resource(DappName, updateArg)}
+        onSuccess={() => analytics.track({
+          event: 'Dapp Updated - CLI',
+          userId: API.authData.User.Email,
+          properties: {
+            ...standardTrackProps(API),
+            DappName, ...updateArg
+          }
+        })} />
     )} />
   )
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Argv } from 'yargs';
 import { PrettyRequest, App, ApiMethodLabel } from '../../ui';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { commandFromSampleArgs, describePositionalArgs, fastRender } from '../../services/util';
+import { commandFromSampleArgs, describePositionalArgs, fastRender } from '../../services';
 import { ArgShape } from '../../cli';
 import { Login } from '@eximchain/dappbot-types/spec/methods/auth';
 
@@ -23,7 +23,7 @@ export function handler(args: ArgShape<Login.Args>) {
       return (
         <PrettyRequest
           operation={ApiMethodLabel(Login.HTTP, Login.Path)}
-          req={() => API.auth.login.resource({
+          resource={() => API.auth.login.resource({
             username, password
           })} />
       )

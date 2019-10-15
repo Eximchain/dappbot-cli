@@ -2,7 +2,7 @@ import React from 'react';
 import { Argv } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
 import { PrettyRequest, App, ApiMethodLabel,  } from '../../ui';
-import { commandFromSampleArgs, describePositionalArgs, fastRender } from '../../services/util';
+import { commandFromSampleArgs, describePositionalArgs, fastRender } from '../../services';
 import { ArgShape } from '../../cli';
 import { BeginPassReset } from '@eximchain/dappbot-types/spec/methods/auth';
 
@@ -26,7 +26,7 @@ export function handler(args: ArgShape<BeginPassReset.Args>) {
       return (
         <PrettyRequest 
           operation={ApiMethodLabel(BeginPassReset.HTTP, BeginPassReset.Path)}
-          req={() => API.auth.beginPasswordReset.resource({ username })} />
+          resource={() => API.auth.beginPasswordReset.resource({ username })} />
       )
     }
   }

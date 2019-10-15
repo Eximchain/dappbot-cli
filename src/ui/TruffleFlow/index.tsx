@@ -1,9 +1,9 @@
-import React, { FC, useState, ReactElement } from 'react';
+import React, { FC, useState } from 'react';
 import { TextProps } from 'ink';
 import { XOR } from 'ts-xor';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 
-import { TruffleArtifact } from '../../services/util';
+import { TruffleArtifact } from '../../services';
 
 import CreateOrUpdate from './Stage1-CreateOrUpdate';
 import SelectArtifact from './Stage2-SelectArtifact';
@@ -22,6 +22,7 @@ export type StringElt = string | ReturnType<FC<TextProps>>;
 
 export const TruffleFlow:FC<TruffleFlowProps> = (props) => {
   const { API, artifacts, authFile } = props;
+  
   const [isUpdate, setIsUpdate] = useState(null as XOR<null, boolean>);
   const [artifact, setArtifact] = useState(null as XOR<null, TruffleArtifact>);
   const [Web3URL, setWeb3URL] = useState('');

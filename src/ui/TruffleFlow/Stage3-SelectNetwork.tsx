@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { Text } from 'ink';
 import flatten from 'lodash.flatten';
 import { ArgPrompt, ChainOption, ChevronText, Select } from '../helpers';
-import { TruffleArtifact } from '../../services/util';
+import { TruffleArtifact } from '../../services';
 import { XOR } from 'ts-xor';
 import { StringElt } from '.';
 import { Chain } from '@eximchain/dappbot-types/spec/dapp';

@@ -2,9 +2,9 @@
 import yargs, { Arguments } from 'yargs';
 import fs from 'fs';
 import path from 'path';
-import { loadFileFromPath, addDefaultAuthIfPresent, addDefaultConfigIfPresent } from './services/util';
+import { loadFileFromPath, addDefaultAuthIfPresent, addDefaultConfigIfPresent } from './services';
 
-const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
+export const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
 export const DEFAULT_CONFIG_PATH = './dappbotConfig.json';
 export const DEFAULT_DATA_PATH = './dappbotAuthData.json';
