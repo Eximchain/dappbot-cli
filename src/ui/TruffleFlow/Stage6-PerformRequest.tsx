@@ -5,7 +5,7 @@ import {
   Loader, errMsgFromResource, ErrorBox, Rows, 
   ChevronText, SuccessLabel
 } from '../helpers';
-import { TruffleArtifact, analytics, standardTrackProps } from '../../services/util';
+import { TruffleArtifact, analytics, standardTrackProps } from '../../services';
 import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
 import { useResource } from 'react-request-hook';
 import Responses from '@eximchain/dappbot-types/spec/responses';

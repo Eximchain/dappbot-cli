@@ -1,7 +1,7 @@
 import React from 'react';
 import { Argv, Options } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender, cleanExit, analytics, standardTrackProps } from '../../services/util';
+import { requireAuthData, fastRender, analytics, standardTrackProps } from '../../services';
 import { ArgShape, DappNameArg, UniversalArgs } from '../../cli';
 import { CreateDapp } from '@eximchain/dappbot-types/spec/methods/private';
 import { App, PrettyRequest, ApiMethodLabel, ErrorBox } from '../../ui';

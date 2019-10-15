@@ -1,6 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { Text } from 'ink';
-import { TruffleArtifact } from '../../services/util';
+import { TruffleArtifact } from '../../services';
 import { Select, ChevronText } from '../helpers';
 import { StringElt } from '.';
 

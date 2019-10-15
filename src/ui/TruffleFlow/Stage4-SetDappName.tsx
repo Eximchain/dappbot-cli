@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { Text } from 'ink';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { Loader, ArgPrompt, Select, Rows, ChevronText } from '../helpers';
-import { TruffleArtifact } from '../../services/util';
+import { TruffleArtifact } from '../../services';
 import { useResource } from 'react-request-hook';
 import { StringElt } from '.';
 

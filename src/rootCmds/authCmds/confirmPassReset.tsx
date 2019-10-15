@@ -2,7 +2,7 @@ import React from 'react';
 import { Argv } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
 import { PrettyRequest, App, ApiMethodLabel } from '../../ui';
-import { commandFromSampleArgs, describePositionalArgs, fastRender } from '../../services/util';
+import { commandFromSampleArgs, describePositionalArgs, fastRender } from '../../services';
 import { ArgShape } from '../../cli';
 import { ConfirmPassReset } from '@eximchain/dappbot-types/spec/methods/auth';
 

@@ -3,7 +3,7 @@ import { TextProps } from 'ink';
 import { XOR } from 'ts-xor';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 
-import { TruffleArtifact, analytics } from '../../services/util';
+import { TruffleArtifact } from '../../services';
 
 import CreateOrUpdate from './Stage1-CreateOrUpdate';
 import SelectArtifact from './Stage2-SelectArtifact';

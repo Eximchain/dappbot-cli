@@ -2,7 +2,7 @@ import React from 'react';
 import { Argv } from 'yargs';
 import { App, PrettyRequest, ApiMethodLabel } from '../../ui';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender } from '../../services/util';
+import { requireAuthData, fastRender } from '../../services';
 import { ArgShape, DappNameArg, UniversalArgs } from '../../cli';
 import { ReadDapp } from '@eximchain/dappbot-types/spec/methods/private';
 
