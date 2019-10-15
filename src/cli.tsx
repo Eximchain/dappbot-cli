@@ -2,7 +2,7 @@
 import yargs, { Arguments } from 'yargs';
 import fs from 'fs';
 import path from 'path';
-import { loadFileFromPath, addDefaultAuthIfPresent, addDefaultConfigIfPresent } from './services/util';
+import { loadFileFromPath, addDefaultAuthIfPresent, addDefaultConfigIfPresent } from './services';
 
 export const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
