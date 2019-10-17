@@ -7,8 +7,8 @@ import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
 import { Loader, errMsgFromResource, SuccessBox, ErrorBox, ChevronText } from './helpers';
-import { analytics, standardTrackProps } from '../services/util';
 import { DEFAULT_DATA_PATH } from '../cli';
+import { trackLogin } from '../services';
 
 export interface LoginFlowProps {
   API: DappbotAPI
@@ -27,18 +27,7 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
       Responses.isSuccessResponse(data) &&
       User.isAuthData(data.data)
     ) {
-      analytics.track({
-        event: 'User Login - CLI',
-        userId: data.data.User.Email,
-        properties: {
-          ...standardTrackProps(API),
-          // Manually setting email because we do not
-          // expect the API to already have valid auth
-          // within this flow.
-          email: data.data.User.Email,
-          isRefresh: false
-        }
-      })
+      trackLogin(API, false);
       const authData = data.data;
       const authPath = path.resolve(process.cwd(), dataPath);
       fs.writeFileSync(authPath, JSON.stringify(authData, null, 2));

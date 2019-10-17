@@ -5,7 +5,7 @@ import {
   Loader, errMsgFromResource, ErrorBox, Rows, 
   ChevronText, SuccessLabel
 } from '../helpers';
-import { TruffleArtifact, analytics, standardTrackProps } from '../../services';
+import { TruffleArtifact, trackCreateDapp, trackUpdateDapp } from '../../services';
 import { Tiers } from '@eximchain/dappbot-types/spec/dapp';
 import { useResource } from 'react-request-hook';
 import Responses from '@eximchain/dappbot-types/spec/responses';
@@ -19,15 +19,18 @@ export interface StagePerformRequestProps {
   ContractAddr: string
 }
 
+// Defaulting this out until we support creating dapps
+// of another tier.
+const Tier = Tiers.Standard;
+
 export const StagePerformRequest: FC<StagePerformRequestProps> = (props) => {
   const { DappName, Web3URL, ContractAddr, API, isUpdate, artifact } = props;
   const Abi = JSON.stringify(artifact.abi);
   const req = isUpdate ?
     () => API.private.updateDapp.resource(DappName, { Web3URL, ContractAddr, Abi }) :
     () => API.private.createDapp.resource(DappName, {
-      Web3URL, ContractAddr, Abi,
+      Web3URL, ContractAddr, Abi, Tier,
       GuardianURL: 'https://example.com',
-      Tier: Tiers.Standard
     })
 
   const [res, makeReq] = useResource(req);
@@ -39,25 +42,9 @@ export const StagePerformRequest: FC<StagePerformRequestProps> = (props) => {
   useEffect(function trackResponse(){
     if (data && Responses.isSuccessResponse(data)) {
       if (isUpdate) {
-        analytics.track({
-          event: 'Dapp Updated - CLI:Truffle',
-          userId: API.authData.User.Email,
-          properties: {
-            ...standardTrackProps(API),
-            DappName, Web3URL, ContractAddr
-          }
-        })
+        trackCreateDapp(API, DappName, { Web3URL, ContractAddr, Tier }, { isTruffle: true });
       } else {
-        analytics.track({
-          event: 'Dapp Created - CLI:Truffle',
-          userId: API.authData.User.Email,
-          properties: {
-            ...standardTrackProps(API),
-            Web3URL, ContractAddr, Abi,
-            GuardianURL: 'https://example.com',
-            Tier: Tiers.Standard
-          }
-        })
+        trackUpdateDapp(API, DappName, { Web3URL, ContractAddr }, { isTruffle: true })
       }
     }
   }, [data]);

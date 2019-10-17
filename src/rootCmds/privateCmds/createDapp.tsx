@@ -1,7 +1,7 @@
 import React from 'react';
 import { Argv, Options } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender, analytics, standardTrackProps } from '../../services';
+import { requireAuthData, fastRender, trackCreateDapp } from '../../services';
 import { ArgShape, DappNameArg, UniversalArgs } from '../../cli';
 import { CreateDapp } from '@eximchain/dappbot-types/spec/methods/private';
 import { App, PrettyRequest, ApiMethodLabel, ErrorBox } from '../../ui';
@@ -73,14 +73,7 @@ export function handler(args: ArgShape<CreateDapp.Args & DappNameArg>) {
         <PrettyRequest
           operation={ApiMethodLabel(CreateDapp.HTTP, CreateDapp.Path(DappName))}
           resource={() => API.private.createDapp.resource(DappName, createArgs)} 
-          onSuccess={() => analytics.track({
-            event: 'Dapp Created - CLI',
-            userId: API.authData.User.Email,
-            properties: {
-              ...standardTrackProps(API),
-              DappName, ...createArgs
-            }
-          })} />
+          onSuccess={() => trackCreateDapp(API, DappName, createArgs, { isTruffle: false })} />
       )
     }} />
   )

@@ -1,20 +1,6 @@
 import { render } from 'ink';
-import Analytics from 'analytics-node';
 import fs from 'fs';
 import path from 'path';
-import DappbotAPI from '@eximchain/dappbot-api-client';
-import { npmPackage } from "../cli";
-
-const WRITE_KEY = 'aMv7BUcQfCSy8XYMBgXYMdLMr8fkhI4a';
-export const analytics = new Analytics(WRITE_KEY, { flushAt: 1})
-
-export function standardTrackProps(API:DappbotAPI) {
-  return {
-    email: API.authData.User.Email,
-    apiUrl: API.dappbotUrl,
-    cliVersion: npmPackage.version as string
-  }
-}
 
 export const fastRender:typeof render = (tree) => {
   // @ts-ignore Types don't know about fastmode

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Argv } from 'yargs';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender, analytics, standardTrackProps } from '../../services';
+import { requireAuthData, fastRender, trackUpdateDapp } from '../../services';
 import { BaseOptions } from './createDapp';
 import { UpdateDapp } from '@eximchain/dappbot-types/spec/methods/private';
 import { DappNameArg, ArgShape, UniversalArgs } from '../../cli';
@@ -60,14 +60,7 @@ export function handler(args:ArgShape<UpdateDapp.Args & DappNameArg>) {
       <PrettyRequest 
         operation={ApiMethodLabel(UpdateDapp.HTTP, UpdateDapp.Path(DappName))}
         resource={() => API.private.updateDapp.resource(DappName, updateArg)}
-        onSuccess={() => analytics.track({
-          event: 'Dapp Updated - CLI',
-          userId: API.authData.User.Email,
-          properties: {
-            ...standardTrackProps(API),
-            DappName, ...updateArg
-          }
-        })} />
+        onSuccess={() => trackUpdateDapp(API, DappName, updateArg, { isTruffle: false })} />
     )} />
   )
 }

@@ -3,7 +3,7 @@ import { Argv } from 'yargs';
 import { App, PrettyRequest, ApiMethodLabel } from '../../ui';
 import { ArgShape, DappNameArg, UniversalArgs } from '../../cli';
 import { RootResources } from '@eximchain/dappbot-types/spec/methods';
-import { requireAuthData, fastRender, analytics, standardTrackProps } from '../../services';
+import { requireAuthData, fastRender, trackDeleteDapp } from '../../services';
 import { DeleteDapp } from '@eximchain/dappbot-types/spec/methods/private';
 
 export const command = `${RootResources.private}/deleteDapp <DappName>`;
@@ -22,14 +22,7 @@ export function handler(args:ArgShape<DappNameArg>) {
         <PrettyRequest 
           operation={ApiMethodLabel(DeleteDapp.HTTP, DeleteDapp.Path(DappName))}
           resource={() => API.private.deleteDapp.resource(DappName)} 
-          onSuccess={() => analytics.track({
-            event: 'Dapp Deleted - CLI',
-            userId: API.authData.User.Email,
-            properties: {
-              ...standardTrackProps(API),
-              DappName
-            }
-          })} />
+          onSuccess={() => trackDeleteDapp(API, DappName)} />
       )
     }} />
   )

@@ -8,7 +8,7 @@ import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { isAuthData } from '@eximchain/dappbot-types/spec/user';
 import { DEFAULT_DATA_PATH } from '../../cli';
 import { Static, Text } from 'ink';
-import { analytics, standardTrackProps } from '../../services/util';
+import { trackLogin } from '../../services';
 
 export interface StageFinalLoginProps {
   API: DappbotAPI
@@ -27,18 +27,7 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
     let authData = data.data;
     fs.writeFileSync(path.resolve(process.cwd(), authPath), JSON.stringify(authData, null, 2))
     setWriteComplete(true);
-    analytics.track({
-      event: 'User Login - CLI',
-      userId: authData.User.Email,
-      properties: {
-        ...standardTrackProps(API),
-        // Manually setting email because this API
-        // will not be configured with the new auth
-        // from this very login.
-        email: authData.User.Email,
-        isRefresh: false
-      }
-    })
+    trackLogin(API, false);
   }, [isLoading, data, error, authPath])
 
   if (authPath === '') {
