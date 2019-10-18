@@ -25,8 +25,8 @@
 		"postinstall": "node build/cli.js onboarding"
 	},
 	"dependencies": {
-		"@eximchain/dappbot-api-client": "^1.2.1",
-		"@eximchain/dappbot-types": "^1.6.1",
+		"@eximchain/dappbot-api-client": "^1.2.3",
+		"@eximchain/dappbot-types": "^1.7.8",
 		"@types/analytics-node": "^3.1.1",
 		"@types/ink-spinner": "^2.0.1",
 		"@types/lodash.flatten": "^4.4.6",
