@@ -1,6 +1,6 @@
 {
 	"name": "@eximchain/dappbot-cli",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"author": {
 		"name": "John O'Sullivan",
 		"email": "john@eximchain.com"
