@@ -48,7 +48,7 @@ export const CreateAccount: FC<CreateAccountProps> = ({ API, setEmail }) => {
   if (organization === '') return (
     <ArgPrompt name='Organization'
       label={[
-        <ChevronText key='org-q'>What organization are you working with?  If you're working alone, please enter "Self".</ChevronText>,
+        <ChevronText key='org-q'>What organization are you working with?  If working alone, please enter "Self".</ChevronText>,
         <ChevronText key='org-optional'>This is optional, but we are curious.</ChevronText>
       ]}
       withResult={(orgVal) => {
