@@ -12,9 +12,10 @@ export interface CreateAccountProps {
 }
 
 export const CreateAccount: FC<CreateAccountProps> = ({ API, setEmail }) => {
-  // TODO: Gather organization & occupation
   const [email, setEmailState] = useState('');
   const [name, setName] = useState('');
+  const [organization, setOrganization] = useState('');
+  const [occupation, setOccupation] = useState('');
 
   const [signupResponse, requestSignup] = useResource(API.payment.signUp.resource);
   const { data, isLoading, error } = signupResponse;
@@ -22,7 +23,7 @@ export const CreateAccount: FC<CreateAccountProps> = ({ API, setEmail }) => {
   useEffect(function handleResponse() {
     if (Responses.isSuccessResponse(data)) {
       setEmail(email);
-      trackSignup(API, email, { name });
+      trackSignup(API, email, { name, organization, occupation });
     } else {
       setLocalErr(data);
     }
@@ -40,13 +41,40 @@ export const CreateAccount: FC<CreateAccountProps> = ({ API, setEmail }) => {
       label={<ChevronText>What is your name?</ChevronText>}
       withResult={(nameVal) => {
         setName(nameVal);
+      }}
+      key='namePrompt' />
+  )
+
+  if (organization === '') return (
+    <ArgPrompt name='Organization'
+      label={[
+        <ChevronText key='org-q'>What organization are you working with?  If you're working alone, please enter "Self".</ChevronText>,
+        <ChevronText key='org-optional'>This is optional, but we are curious.</ChevronText>
+      ]}
+      withResult={(orgVal) => {
+        // This value needs to not be an empty string in order
+        // to progress within the flow.
+        let chosenVal = orgVal !== '' ? orgVal : 'N/A';
+        setOrganization(chosenVal);
+      }}
+      key='orgPrompt' />
+  )
+
+  if (occupation === '') return (
+    <ArgPrompt name='Occupation'
+      label={[
+        <ChevronText key='occupation-q'>What is your occupation?</ChevronText>,
+        <ChevronText key='occupation-optional'>This is also optional, although we are still curious.</ChevronText>
+      ]}
+      withResult={(occupationVal) => {
+        let chosenVal = occupationVal !== '' ? occupationVal : 'N/A';
+        setOccupation(chosenVal);
         requestSignup({
-          email,
-          name: nameVal,
+          email, name,
           plans: Payment.trialStripePlan()
         })
       }}
-      key='namePrompt' />
+      key='occupationPrompt' />
   )
 
   return error || localErr ? (
