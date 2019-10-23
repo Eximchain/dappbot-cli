@@ -12,7 +12,6 @@ export interface CreateAccountProps {
 }
 
 export const CreateAccount: FC<CreateAccountProps> = ({ API, setEmail }) => {
-  // TODO: Gather organization & occupation
   const [email, setEmailState] = useState('');
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
