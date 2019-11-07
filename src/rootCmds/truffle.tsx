@@ -60,10 +60,6 @@ export function handler(args:ArgShape) {
     )
   }
 
-  // artifacts.forEach(artifact => console.log(Object.keys(artifact.networks)))
-  // console.log('now with parseInt')
-  // artifacts.forEach(artifact => console.log(Object.keys(artifact.networks).map(parseInt)))
-
   // Got deployable artifacts, good to go!
   fastRender(
     <App args={args} renderFunc={props => <TruffleFlow {...props} artifacts={deployedArtifacts} authFile={authFile}  />}/>
