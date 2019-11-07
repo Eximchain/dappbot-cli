@@ -21,6 +21,12 @@ export type AppProps<Additional extends AdditionalArgs> = PropsWithChildren<{
 
 export default App;
 
+/**
+ * App essentially just includes the <RequestProvider>, as we need it to have
+ * been rendered by a parent component in order to perform API calls via 
+ * the `.resource()` methods.
+ * @param props 
+ */
 export function App<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
   return (
     <RequestProvider value={axios}>
@@ -29,6 +35,11 @@ export function App<Additional extends AdditionalArgs>(props: AppProps<Additiona
   )
 }
 
+/**
+ * AppWithoutProvider performs the actual setup logic, including creating the
+ * API instance and refreshing the current authentication if necessary & possible.
+ * @param props 
+ */
 function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
   const { args, renderFunc } = props;
   const [authData, setAuthData] = useState(JSON.parse(args.authFile as string));
