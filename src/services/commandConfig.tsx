@@ -5,7 +5,7 @@ import path from 'path';
 import isEqual from 'lodash.isequal';
 import { render } from 'ink';
 import { ArgShape, DEFAULT_CONFIG_PATH, UniversalArgs, npmPackage } from "../cli";
-import User from "@eximchain/dappbot-types/spec/user";
+import User, { authStatus } from "@eximchain/dappbot-types/spec/user";
 import { AUTH_FILE_PATH, initAuthFile } from "./authStorage";
 import { ErrorBox } from '../ui';
 
@@ -124,9 +124,8 @@ export const requireAuthData:MiddlewareFunction<UniversalArgs> = (args) => {
     authErr();
     return;
   }
-  const { ExpiresAt, ...authDataMinusExpires } = authData;
-  const { ExpiresAt: OtherExpires, ...freshDataMinusExpires } = User.newAuthData();
-  if (isEqual(authDataMinusExpires, freshDataMinusExpires)) {
+
+  if (authStatus(authData).isEmpty) {
     authErr()
     return;
   }
