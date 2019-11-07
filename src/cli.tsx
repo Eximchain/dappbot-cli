@@ -2,7 +2,7 @@
 import yargs, { Arguments } from 'yargs';
 import fs from 'fs';
 import path from 'path';
-import { loadFileFromPath, addDefaultAuthIfPresent, addDefaultConfigIfPresent } from './services';
+import { loadFileFromPath, addDefaultAuthPath, addDefaultConfigFile } from './services';
 
 export const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
@@ -32,7 +32,8 @@ yargs
 		authPath : {
 			alias: 'a',
 			normalize: true,
-			description: "The path to a JSON file with saved DappBot auth data; defaults to './dappbotAuthData.json'."
+			hidden: true,
+			description: `The path to a JSON file with saved DappBot auth data; defaults to ${__dirname}/dappbotAuthData.json.`
 		},
 		apiUrl: {
 			description: "The URL for DappBot's API.",
@@ -50,8 +51,8 @@ yargs
 			group: 'URL Options:'
 		}
 	})
-	.middleware(addDefaultAuthIfPresent)
-	.middleware(addDefaultConfigIfPresent)
+	.middleware(addDefaultAuthPath)
+	.middleware(addDefaultConfigFile)
 	.middleware(loadFileFromPath)
 	.commandDir('rootCmds')
 	.usage('Usage: dappbot <command>')

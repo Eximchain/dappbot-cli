@@ -7,7 +7,7 @@ import { ArgShape, AdditionalArgs } from '../cli';
 import { Loader } from './helpers';
 import { RequestProvider } from 'react-request-hook';
 import axios from 'axios';
-import { trackLogin } from '../services';
+import { trackLogin, saveAuthToFile, loadAuthFromFile } from '../services';
 
 export type RenderFuncProps<Additional extends AdditionalArgs = AdditionalArgs> = (props: {
   API: DappbotAPI
@@ -23,16 +23,13 @@ export type AppProps<Additional extends AdditionalArgs> = PropsWithChildren<{
 
 function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
   const { args, renderFunc } = props;
-  const initialAuth: AuthData = args.authFile ? JSON.parse(args.authFile) : newAuthData();
-  const [authData, setAuthData] = useState(initialAuth);
+  const [authData, setAuthData] = useState(loadAuthFromFile());
 
   const API = new DappbotAPI({
     authData,
     setAuthData: (auth) => {
-      if (args.authPath) {
-        fs.writeFileSync(path.resolve(process.cwd(), args.authPath), JSON.stringify(auth, null, 2));
-      }
       setAuthData(auth);
+      saveAuthToFile(auth);
     },
     dappbotUrl: args.apiUrl
   })
