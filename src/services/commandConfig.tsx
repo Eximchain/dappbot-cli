@@ -6,7 +6,7 @@ import isEqual from 'lodash.isequal';
 import { render } from 'ink';
 import { ArgShape, DEFAULT_CONFIG_PATH, UniversalArgs, npmPackage } from "../cli";
 import User from "@eximchain/dappbot-types/spec/user";
-import { AUTH_DATA_PATH, initAuthFile } from "./authStorage";
+import { AUTH_FILE_PATH, initAuthFile } from "./authStorage";
 import { ErrorBox } from '../ui';
 
 /**
@@ -103,7 +103,7 @@ export function addDefaultAuthPath(args:ArgShape): ArgShape {
   // by the `loadFileFromPath` middleware.
   initAuthFile();
 
-  args.authPath = AUTH_DATA_PATH;
+  args.authPath = AUTH_FILE_PATH;
   return args;
 }
 

@@ -1,8 +1,6 @@
 import React, { useState, PropsWithChildren, ReactElement, useEffect } from 'react';
-import path from 'path';
-import fs from 'fs';
 import DappbotAPI from '@eximchain/dappbot-api-client';
-import { newAuthData, AuthData } from '@eximchain/dappbot-types/spec/user';
+import { AuthData } from '@eximchain/dappbot-types/spec/user';
 import { ArgShape, AdditionalArgs } from '../cli';
 import { Loader } from './helpers';
 import { RequestProvider } from 'react-request-hook';
@@ -20,6 +18,16 @@ export type AppProps<Additional extends AdditionalArgs> = PropsWithChildren<{
   args: ArgShape<Additional>
   renderFunc: RenderFuncProps<Additional>
 }>
+
+export default App;
+
+export function App<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
+  return (
+    <RequestProvider value={axios}>
+      <AppWithoutProvider {...props} />
+    </RequestProvider>
+  )
+}
 
 function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
   const { args, renderFunc } = props;
@@ -49,13 +57,3 @@ function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<A
       })
     )
 }
-
-export function App<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
-  return (
-    <RequestProvider value={axios}>
-      <AppWithoutProvider {...props} />
-    </RequestProvider>
-  )
-}
-
-export default App;
