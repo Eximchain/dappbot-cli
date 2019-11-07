@@ -6,7 +6,6 @@ import { useResource } from 'react-request-hook';
 import { ArgPrompt, ErrorBox, Loader, ChevronText, Rows, SuccessLabel } from '../helpers';
 import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { isAuthData } from '@eximchain/dappbot-types/spec/user';
-import { DEFAULT_DATA_PATH } from '../../cli';
 import { Static, Text } from 'ink';
 import { trackLogin, saveAuthToFile } from '../../services';
 
@@ -17,7 +16,6 @@ export interface StageFinalLoginProps {
 }
 
 export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) => {
-  const [authPath, setAuthPath] = useState('');
   const [loginResponse, requestLogin] = useResource(API.auth.login.resource);
   const { isLoading, data, error } = loginResponse;
   const [writeComplete, setWriteComplete] = useState(false);
@@ -35,7 +33,7 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
     saveAuthToFile(authData);
     setWriteComplete(true);
     trackLogin(API, false);
-  }, [isLoading, data, error, authPath])
+  }, [isLoading, data, error])
 
   if (error) return (
     <ErrorBox permanent errMsg={error.data.err.message} />
@@ -61,7 +59,7 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
       <></>
     </Static>
   ) : (
-    <Loader message={`Completing your login and saving the auth data to ${path.normalize(authPath)} ...`} />
+    <Loader message={`Completing your login...`} />
   )
 }
 

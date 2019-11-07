@@ -7,7 +7,6 @@ import { loadFileFromPath, addDefaultAuthPath, addDefaultConfigFile } from './se
 export const npmPackage = JSON.parse(fs.readFileSync(path.resolve(__dirname, './../package.json')).toString());
 
 export const DEFAULT_CONFIG_PATH = './dappbotConfig.json';
-export const DEFAULT_DATA_PATH = './dappbotAuthData.json';
 export interface DappNameArg {
   DappName: string
 }
@@ -56,7 +55,7 @@ yargs
 	.middleware(loadFileFromPath)
 	.commandDir('rootCmds')
 	.usage('Usage: dappbot <command>')
-	.demandCommand(2)
+	.demandCommand(1)
 	.wrap(Math.min(yargs.terminalWidth(), 160))
 	.help('help')
 	.alias('help', 'h')

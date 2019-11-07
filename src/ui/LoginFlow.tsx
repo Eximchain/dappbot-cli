@@ -7,7 +7,6 @@ import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
 import { Loader, errMsgFromResource, SuccessBox, ErrorBox, ChevronText } from './helpers';
-import { DEFAULT_DATA_PATH } from '../cli';
 import { trackLogin, saveAuthToFile } from '../services';
 
 export interface LoginFlowProps {

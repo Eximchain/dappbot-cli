@@ -20,6 +20,7 @@
 	"scripts": {
 		"test": "xo && ava",
 		"build": "tsc",
+		"dev": "tsc --watch",
 		"start": "node build/cli.js",
 		"prepare": "npm run build",
 		"postinstall": "node build/cli.js onboarding"
@@ -47,6 +48,7 @@
 		"ink-text-input": "^3.2.1",
 		"lodash.flatten": "^4.4.0",
 		"lodash.groupby": "^4.6.0",
+		"lodash.isequal": "^4.5.0",
 		"node-fetch": "^2.6.0",
 		"open": "^6.4.0",
 		"password-validator": "^5.0.2",
@@ -59,6 +61,7 @@
 	"devDependencies": {
 		"@babel/preset-react": "^7.0.0",
 		"@babel/register": "^7.6.0",
+		"@types/lodash.isequal": "^4.5.5",
 		"ava": "^2.3.0",
 		"chalk": "^2.4.2",
 		"eslint-config-xo-react": "^0.20.0",
