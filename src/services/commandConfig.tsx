@@ -2,10 +2,9 @@ import React from 'react';
 import { PositionalOptions, Argv, MiddlewareFunction } from "yargs";
 import fs from 'fs';
 import path from 'path';
-import isEqual from 'lodash.isequal';
 import { render } from 'ink';
-import { ArgShape, DEFAULT_CONFIG_PATH, UniversalArgs, npmPackage } from "../cli";
-import User, { authStatus } from "@eximchain/dappbot-types/spec/user";
+import { ArgShape, DEFAULT_CONFIG_PATH, UniversalArgs } from "../cli";
+import User from "@eximchain/dappbot-types/spec/user";
 import { AUTH_FILE_PATH, initAuthFile } from "./authStorage";
 import { ErrorBox } from '../ui';
 
@@ -125,7 +124,7 @@ export const requireAuthData:MiddlewareFunction<UniversalArgs> = (args) => {
     return;
   }
 
-  if (authStatus(authData).isEmpty) {
+  if (User.authStatus(authData).isEmpty) {
     authErr()
     return;
   }
