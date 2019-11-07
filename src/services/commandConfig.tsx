@@ -1,8 +1,13 @@
+import React from 'react';
 import { PositionalOptions, Argv, MiddlewareFunction } from "yargs";
 import fs from 'fs';
 import path from 'path';
-import { ArgShape, DEFAULT_DATA_PATH, DEFAULT_CONFIG_PATH, UniversalArgs, npmPackage } from "../cli";
+import isEqual from 'lodash.isequal';
+import { render } from 'ink';
+import { ArgShape, DEFAULT_CONFIG_PATH, UniversalArgs, npmPackage } from "../cli";
 import User from "@eximchain/dappbot-types/spec/user";
+import { AUTH_FILE_PATH, initAuthFile } from "./authStorage";
+import { ErrorBox } from '../ui';
 
 /**
  * Given a desired command name and an example of the argument shape
@@ -74,8 +79,13 @@ export function loadFileFromPath(args:ArgShape): ArgShape {
   return args;
 }
 
-export function addDefaultConfigIfPresent(args:ArgShape): ArgShape {
+export function addDefaultConfigFile(args:ArgShape): ArgShape {
+  // If the user is manually providing the path to an auth file,
+  // let that override the default -- just return.
   if (args.config) return args;
+
+  // Check if there's a `dappbotConfig.json` file, 
+  // load its contents if so.
   const defaultPath = path.resolve(process.cwd(), DEFAULT_CONFIG_PATH);
   if (!fs.existsSync(defaultPath)) return args;
   Object.assign(args, JSON.parse(fs.readFileSync(defaultPath).toString()))
@@ -83,19 +93,42 @@ export function addDefaultConfigIfPresent(args:ArgShape): ArgShape {
 }
 
 
-export function addDefaultAuthIfPresent(args:ArgShape): ArgShape {
+export function addDefaultAuthPath(args:ArgShape): ArgShape {
+  // If the user is manually providing the path to an auth file,
+  // do not overwrite it -- just return.
   if (args.authPath) return args;
-  const defaultPath = path.resolve(process.cwd(), DEFAULT_DATA_PATH);
-  if (!fs.existsSync(defaultPath)) return args;
-  args.authPath = defaultPath;
+
+  // The load function will initialize the file if it isn't present,
+  // so this pre-load guarantees that it will be successfully loaded
+  // by the `loadFileFromPath` middleware.
+  initAuthFile();
+
+  args.authPath = AUTH_FILE_PATH;
   return args;
 }
 
 
 export const requireAuthData:MiddlewareFunction<UniversalArgs> = (args) => {
-  if (!args.authFile || !User.isAuthData(JSON.parse(args.authFile))) {
-    console.log("You're calling a private API method; please supply a path to your authData file with the --authPath option.");
+  function authErr() {
+    render(
+      <ErrorBox errMsg={"This command requires you to log in; please call 'dappbot signup' or 'dappbot login'."} />
+    )
     process.exit(1);
+  }
+  if (!args.authFile) {
+    authErr();
+    return;
+  }
+  const authData = JSON.parse(args.authFile);
+  if (!User.isAuthData(authData)) {
+    authErr();
+    return;
+  }
+  const { ExpiresAt, ...authDataMinusExpires } = authData;
+  const { ExpiresAt: OtherExpires, ...freshDataMinusExpires } = User.newAuthData();
+  if (isEqual(authDataMinusExpires, freshDataMinusExpires)) {
+    authErr()
+    return;
   }
   return args;
 }

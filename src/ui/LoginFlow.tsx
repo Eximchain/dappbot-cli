@@ -7,8 +7,7 @@ import ArgPrompt from './helpers/ArgPrompt';
 import Responses from '@eximchain/dappbot-types/spec/responses';
 import User from '@eximchain/dappbot-types/spec/user';
 import { Loader, errMsgFromResource, SuccessBox, ErrorBox, ChevronText } from './helpers';
-import { DEFAULT_DATA_PATH } from '../cli';
-import { trackLogin } from '../services';
+import { trackLogin, saveAuthToFile } from '../services';
 
 export interface LoginFlowProps {
   API: DappbotAPI
@@ -17,7 +16,6 @@ export interface LoginFlowProps {
 export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [dataPath, setDataPath] = useState(DEFAULT_DATA_PATH);
   const [loginResult, requestLogin] = useResource(API.auth.login.resource);
   const { data, isLoading, error } = loginResult;
 
@@ -27,12 +25,10 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
       Responses.isSuccessResponse(data) &&
       User.isAuthData(data.data)
     ) {
+      saveAuthToFile(data.data)
       trackLogin(API, false);
-      const authData = data.data;
-      const authPath = path.resolve(process.cwd(), dataPath);
-      fs.writeFileSync(authPath, JSON.stringify(authData, null, 2));
     }
-  }, [data, dataPath])
+  }, [data])
 
   let credentialsLabel = <ChevronText>Please enter your login credentials.</ChevronText>;
   if (username === '') {
@@ -47,22 +43,12 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
       <ArgPrompt name='password' hideVal
         label={credentialsLabel}
         key='passwordPrompt'
-        withResult={setPassword} />
-    )
-  } else if (!isLoading && !data && !error) {
-    return (
-      <ArgPrompt name='Path for auth data'
-        defaultValue={DEFAULT_DATA_PATH}
-        isValid={val => val.endsWith('.json') ? null : 'Path must end in .json'}
-        label={
-          <ChevronText>Where would you like to keep your authData file?  If you put it in the default location, DappBot will automatically read it without having to provide an option.</ChevronText>
-        }
         withResult={(val) => {
-          setDataPath(val);
-          requestLogin({ username, password })
+          requestLogin({ username, password: val });
+          setPassword(val)
         }} />
     )
-  } else if (isLoading) {
+  } else if (isLoading || (!data && !error)) {
     return (
       <Loader message={"Logging you into DappBot..."} />
     )
@@ -71,13 +57,9 @@ export const LoginFlow: FC<LoginFlowProps> = ({ API }) => {
       <ErrorBox errMsg={errMsgFromResource(error)} permanent />
     )
   } else {
-    let followonMsg = dataPath === DEFAULT_DATA_PATH ?
-      `Your auth data will be automatically inferred from ${dataPath} for private commands.` :
-      `Please include the authPath option (e.g. $ dappbot --authPath ${dataPath} ...) for private commands.`
-    
     return (
       <SuccessBox permanent result={{
-        message: `You are now logged in! ${followonMsg}`
+        message: `You are now logged in!`
       }} />
     )
   }

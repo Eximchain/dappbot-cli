@@ -1,13 +1,11 @@
 import React, { useState, PropsWithChildren, ReactElement, useEffect } from 'react';
-import path from 'path';
-import fs from 'fs';
 import DappbotAPI from '@eximchain/dappbot-api-client';
-import { newAuthData, AuthData } from '@eximchain/dappbot-types/spec/user';
+import { AuthData } from '@eximchain/dappbot-types/spec/user';
 import { ArgShape, AdditionalArgs } from '../cli';
 import { Loader } from './helpers';
 import { RequestProvider } from 'react-request-hook';
 import axios from 'axios';
-import { trackLogin } from '../services';
+import { trackLogin, saveAuthToFile } from '../services';
 
 export type RenderFuncProps<Additional extends AdditionalArgs = AdditionalArgs> = (props: {
   API: DappbotAPI
@@ -21,18 +19,36 @@ export type AppProps<Additional extends AdditionalArgs> = PropsWithChildren<{
   renderFunc: RenderFuncProps<Additional>
 }>
 
+export default App;
+
+/**
+ * App essentially just includes the <RequestProvider>, as we need it to have
+ * been rendered by a parent component in order to perform API calls via 
+ * the `.resource()` methods.
+ * @param props 
+ */
+export function App<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
+  return (
+    <RequestProvider value={axios}>
+      <AppWithoutProvider {...props} />
+    </RequestProvider>
+  )
+}
+
+/**
+ * AppWithoutProvider performs the actual setup logic, including creating the
+ * API instance and refreshing the current authentication if necessary & possible.
+ * @param props 
+ */
 function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
   const { args, renderFunc } = props;
-  const initialAuth: AuthData = args.authFile ? JSON.parse(args.authFile) : newAuthData();
-  const [authData, setAuthData] = useState(initialAuth);
+  const [authData, setAuthData] = useState(JSON.parse(args.authFile as string));
 
   const API = new DappbotAPI({
     authData,
     setAuthData: (auth) => {
-      if (args.authPath) {
-        fs.writeFileSync(path.resolve(process.cwd(), args.authPath), JSON.stringify(auth, null, 2));
-      }
       setAuthData(auth);
+      saveAuthToFile(auth);
     },
     dappbotUrl: args.apiUrl
   })
@@ -52,13 +68,3 @@ function AppWithoutProvider<Additional extends AdditionalArgs>(props: AppProps<A
       })
     )
 }
-
-export function App<Additional extends AdditionalArgs>(props: AppProps<Additional>): ReactElement {
-  return (
-    <RequestProvider value={axios}>
-      <AppWithoutProvider {...props} />
-    </RequestProvider>
-  )
-}
-
-export default App;

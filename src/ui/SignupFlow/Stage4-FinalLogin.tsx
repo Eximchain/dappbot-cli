@@ -6,9 +6,8 @@ import { useResource } from 'react-request-hook';
 import { ArgPrompt, ErrorBox, Loader, ChevronText, Rows, SuccessLabel } from '../helpers';
 import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { isAuthData } from '@eximchain/dappbot-types/spec/user';
-import { DEFAULT_DATA_PATH } from '../../cli';
 import { Static, Text } from 'ink';
-import { trackLogin } from '../../services';
+import { trackLogin, saveAuthToFile } from '../../services';
 
 export interface StageFinalLoginProps {
   API: DappbotAPI
@@ -17,36 +16,24 @@ export interface StageFinalLoginProps {
 }
 
 export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) => {
-  const [authPath, setAuthPath] = useState('');
   const [loginResponse, requestLogin] = useResource(API.auth.login.resource);
   const { isLoading, data, error } = loginResponse;
   const [writeComplete, setWriteComplete] = useState(false);
 
+  useEffect(function requestLoginOnLoad(){
+    requestLogin({
+      username: email,
+      password: pass
+    })
+  }, [])
+
   useEffect(function handleResponse(){
     if (!(isSuccessResponse(data) && isAuthData(data.data))) return;
     let authData = data.data;
-    fs.writeFileSync(path.resolve(process.cwd(), authPath), JSON.stringify(authData, null, 2))
+    saveAuthToFile(authData);
     setWriteComplete(true);
     trackLogin(API, false);
-  }, [isLoading, data, error, authPath])
-
-  if (authPath === '') {
-    return (
-      <ArgPrompt name='Path for authData'
-        label={<ChevronText>Which file would you like to keep your authData in?  If you put it in the default location, DappBot will automatically read it without having to provide an option.</ChevronText>}
-        defaultValue={DEFAULT_DATA_PATH}
-        isValid={(val) => {
-          return val.endsWith('.json') ? null : 'Path must end in .json'
-        }}
-        withResult={(val) => {
-          setAuthPath(path.normalize(val)) 
-          requestLogin({
-            username: email,
-            password: pass
-          })
-        }} />
-    )
-  }
+  }, [isLoading, data, error])
 
   if (error) return (
     <ErrorBox permanent errMsg={error.data.err.message} />
@@ -72,7 +59,7 @@ export const StageFinalLogin: FC<StageFinalLoginProps> = ({ API, email, pass }) 
       <></>
     </Static>
   ) : (
-    <Loader message={`Completing your login and saving the auth data to ${path.normalize(authPath)} ...`} />
+    <Loader message={`Completing your login...`} />
   )
 }
 
