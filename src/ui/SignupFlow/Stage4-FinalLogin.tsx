@@ -1,9 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
-import fs from 'fs';
-import path from 'path';
 import DappbotAPI from '@eximchain/dappbot-api-client';
 import { useResource } from 'react-request-hook';
-import { ArgPrompt, ErrorBox, Loader, ChevronText, Rows, SuccessLabel } from '../helpers';
+import { ErrorBox, Loader, ChevronText, Rows, SuccessLabel } from '../helpers';
 import { isSuccessResponse } from '@eximchain/dappbot-types/spec/responses';
 import { isAuthData } from '@eximchain/dappbot-types/spec/user';
 import { Static, Text } from 'ink';
